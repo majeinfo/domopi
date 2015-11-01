@@ -1,0 +1,32 @@
+{% include "common/header.html" %}
+{% load i18n %}
+
+<table>
+    <tr><th>{% trans "Sensor Name" %}</th><th>{% trans "Sensor Type" %}</th><th>{% trans "Last Update" %}</th><th>{% trans "Status" %}</th><th>{% trans "Command" %}</th></tr>
+{% for sensor in sensors %}
+    <tr>
+        <td>{{ sensor.description }}</td>
+        <td>{{ sensor.devtype }}</td>
+        <td>{{ sensor.last_update }}</td>
+        <td>
+            {{ sensor.metrics.probeTitle }}
+            {% if sensor.metrics.is_level_number %}
+                {{ sensor.metrics.level }} {{ sensor.metrics.scaleTitle }}
+            {% else %}
+                {% if sensor.metrics.on_off %} {% trans "ON" %} {% else %} {% trans "OFF" %} {% endif %}
+            {% endif %}
+        </td>
+        <td>
+            {% if sensor.devtype == 'switchBinary' %}
+                {% if sensor.metrics.on_off %}
+                    <a href="{% url 'sensor_cmd' key=sensor.key sid=sensor.sid cmd='off' %}">{% trans "OFF" %}</a>
+                {% else %}
+                    <a href="{% url 'sensor_cmd' key=sensor.key sid=sensor.sid cmd='on' %}">{% trans "ON" %}</a>
+                {% endif %}
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+</table>
+
+{% include "common/footer.html" %}
