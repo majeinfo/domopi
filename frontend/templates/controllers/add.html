@@ -2,7 +2,7 @@
 {% load i18n %}
 
 <legend>{% trans 'Register your Domopi Box in your Account' %}</legend>
-<form action="{% url 'devices_add' %}" method="post">
+<form action="{% url 'controller_add' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
         <label class="label">{{ field.label_tag }}</label>
