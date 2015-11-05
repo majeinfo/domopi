@@ -5,7 +5,13 @@
     <tr><th>{% trans "Sensor Name" %}</th><th>{% trans "Sensor Type" %}</th><th>{% trans "Last Update" %}</th><th>{% trans "Status" %}</th><th>{% trans "Command" %}</th></tr>
 {% for sensor in sensors %}
     <tr>
-        <td>{{ sensor.description }}</td>
+        <td>{{ sensor.description }}
+            <form method="post" action="{% url 'sensor_setdescr' key=sensor.key zid=sensor.zid sid=sensor.sid %}">
+                {% csrf_token %}
+                <input type="text" name="newname">
+                <input type="submit" value="{% trans "Change Name" %}">
+            </form>
+        </td>
         <td>{{ sensor.devtype }}</td>
         <td>{{ sensor.last_update }}</td>
         <td>
@@ -19,9 +25,9 @@
         <td>
             {% if sensor.devtype == 'switchBinary' %}
                 {% if sensor.metrics.on_off %}
-                    <a href="{% url 'sensor_cmd' key=sensor.key sid=sensor.sid cmd='off' %}">{% trans "OFF" %}</a>
+                    <a href="{% url 'sensor_cmd' key=sensor.key zid=sensor.zid sid=sensor.sid cmd='off' %}">{% trans "OFF" %}</a>
                 {% else %}
-                    <a href="{% url 'sensor_cmd' key=sensor.key sid=sensor.sid cmd='on' %}">{% trans "ON" %}</a>
+                    <a href="{% url 'sensor_cmd' key=sensor.key zid=sensor.zid sid=sensor.sid cmd='on' %}">{% trans "ON" %}</a>
                 {% endif %}
             {% endif %}
         </td>

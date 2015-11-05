@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^controllers/add', controllers.addAction, name='controller_add'),
     url(r'^controllers/setdescr/(?P<key>[^/]+)', controllers.setDescriptionAction, name='controller_setdescr'),
     url(r'^controllers/delete/(?P<key>[^/]+)', controllers.deleteAction, name='controller_delete'),
-    url(r'^sensors/command/(?P<key>[^/]+)/(?P<sid>[^/]+)/(?P<cmd>.+)', sensors.commandAction, name='sensor_cmd'),
+    url(r'^sensors/command/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<sid>[^/]+)/(?P<cmd>.+)', sensors.commandAction, name='sensor_cmd'),
+    url(r'^sensors/setdescr/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<sid>[^/]+)', sensors.setdescrAction, name='sensor_setdescr'),
     url(r'^sensors/(?P<key>[^/]+)', sensors.indexAction, name='sensors_list'),
 ]
