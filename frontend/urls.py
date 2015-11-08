@@ -14,3 +14,4 @@ urlpatterns = [
     url(r'^sensors/setdescr/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<sid>[^/]+)', sensors.setdescrAction, name='sensor_setdescr'),
     url(r'^sensors/(?P<key>[^/]+)', sensors.indexAction, name='sensors_list'),
 ]
+

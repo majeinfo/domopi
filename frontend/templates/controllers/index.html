@@ -1,23 +1,29 @@
-{% include "common/header.html" %}
+{% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
 
 {% if controllers.count == 0 %}
-<br>{% trans "You have no Domopi Box registered yet !" %}
+<div class="alert alert-warning">
+    {% trans "You have no Domopi Box registered yet !" %}
+</div>
 {% else %}
-<table>
-    <tr><th>Controller Key</th><th>{% trans "Description" %}</th><th>{% trans "Action" %}</th></tr>
-{% for contr in controllers %}
-    <tr>
-        <td>{{ contr.key }}</td>
-        <td>{{ contr.description }}</td>
-        <td>
-            <a href="{% url 'sensors_list' key=contr.key %}">{% trans "Manage Sensors" %}</a>
-            <a href="{% url 'controller_setdescr' key=contr.key %}">{% trans "Set Description" %}</a>
-            <a href="{% url 'controller_delete' key=contr.key %}">{% trans "Delete from Account" %}</a>
-        </td>
-    </tr>
-{% endfor %}
+<table class="table">
+    <tbody class="table-striped">
+        <tr><th>Controller Key</th><th>{% trans "Description" %}</th><th>{% trans "Action" %}</th></tr>
+        {% for contr in controllers %}
+        <tr>
+            <td>{{ contr.key }}</td>
+         <td>{{ contr.description }}</td>
+            <td>
+                <a class="btn btn-primary" href="{% url 'sensors_list' key=contr.key %}">{% trans "Manage Sensors" %}</a>
+                <a class="btn btn-info" href="{% url 'controller_setdescr' key=contr.key %}">{% trans "Set Description" %}</a>
+                <a class="btn btn-danger" href="{% url 'controller_delete' key=contr.key %}">{% trans "Delete from Account" %}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endif %}
 
-{% include "common/footer.html" %}
+{% endblock %}

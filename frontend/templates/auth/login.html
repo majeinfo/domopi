@@ -1,16 +1,17 @@
-{% include "common/header.html" %}
+{% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
 
 <legend>{% trans "Connect to your Account:" %}</legend>
 <form action="/frontend/auth/login" method="post">
+    {% bootstrap_form form %}
+    {% bootstrap_form_errors form %}
     {% csrf_token %}
-    {% for field in form %}
-        <label class="label">{{ field.label_tag }}</label>
-        {{ field.errors }}
-        {{ field }}
-    {% endfor %}
-
-    <div><input type="submit" value="{% trans 'Connect' %}"></div>
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "star" %} {% trans 'Connect' %}
+        </button>
+    {% endbuttons %}
 </form>
-
-{% include "common/footer.html" %}
+{% endblock %}

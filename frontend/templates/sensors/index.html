@@ -1,21 +1,25 @@
-{% include "common/header.html" %}
+{% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
 
-<table>
+<table class="table">
     <tr><th>{% trans "Sensor Name" %}</th><th>{% trans "Sensor Type" %}</th><th>{% trans "Last Update" %}</th><th>{% trans "Status" %}</th><th>{% trans "Command" %}</th></tr>
 {% for sensor in sensors %}
     <tr>
-        <td>{{ sensor.description }}
+        <td>
             <form method="post" action="{% url 'sensor_setdescr' key=sensor.key zid=sensor.zid sid=sensor.sid %}">
                 {% csrf_token %}
-                <input type="text" name="newname">
+                <input type="text" name="newname" value="{{ sensor.description }}">
                 <input type="submit" value="{% trans "Change Name" %}">
             </form>
         </td>
         <td>{{ sensor.devtype }}</td>
         <td>{{ sensor.last_update }}</td>
         <td>
-            {{ sensor.metrics.probeTitle }}
+            {% if sensor.metrics.probeTitle %}
+               {{ sensor.metrics.probeTitle }}
+            {% endif %}
             {% if sensor.metrics.is_level_number %}
                 {{ sensor.metrics.level }} {{ sensor.metrics.scaleTitle }}
             {% else %}
@@ -25,9 +29,9 @@
         <td>
             {% if sensor.devtype == 'switchBinary' %}
                 {% if sensor.metrics.on_off %}
-                    <a href="{% url 'sensor_cmd' key=sensor.key zid=sensor.zid sid=sensor.sid cmd='off' %}">{% trans "OFF" %}</a>
+                    <a class="btn btn-danger" href="{% url 'sensor_cmd' key=sensor.key zid=sensor.zid sid=sensor.sid cmd='off' %}">{% trans "OFF" %}</a>
                 {% else %}
-                    <a href="{% url 'sensor_cmd' key=sensor.key zid=sensor.zid sid=sensor.sid cmd='on' %}">{% trans "ON" %}</a>
+                    <a class="btn btn-primary" href="{% url 'sensor_cmd' key=sensor.key zid=sensor.zid sid=sensor.sid cmd='on' %}">{% trans "ON" %}</a>
                 {% endif %}
             {% endif %}
         </td>
@@ -35,4 +39,4 @@
 {% endfor %}
 </table>
 
-{% include "common/footer.html" %}
+{% endblock %}

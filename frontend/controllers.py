@@ -28,8 +28,8 @@ def addAction(request):
                 controller = Controller.objects.get(key=key)
             except:
                 controller = None
+            # check the Controller exists and is not associated to someone else
             if not controller or controller.login:
-                # TODO: check the Controller is not associated to someone else
                 messages.error(request, _('The Controller ID is invalid')) # or is already associated
             else:
                 controller.login = request.user.username
@@ -48,6 +48,14 @@ def addAction(request):
 # TODO: check the Controller belongs to the User
 @login_required
 def deleteAction(request, key):
+    controller = _checkOwner(request, key)
+    if not controller:
+        messages.error(request, _('Invalid Parameters'))
+    else:
+        controller.login = None
+        controller.save()
+        messages.info(request, _('The Controller has been removed from your Account'))
+
     return render(request, 'controllers/index.html', {})
 
 
@@ -58,3 +66,11 @@ def setDescriptionAction(request, key):
     return render(request, 'controllers/index.html', {})
 
 
+# Check the User towards the key
+def _checkOwner(request, key):
+    try:
+        controller = Controller.objects.get(login=request.user.username, key=key)
+    except:
+        return None
+
+    return controller
