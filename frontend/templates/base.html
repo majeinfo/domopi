@@ -1,0 +1,50 @@
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <title>{--% trans page_title %--}</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/frontend">Domopi</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+{% if user.is_authenticated %}
+	<li class="active"><a href="{% url 'auth_logout' %}">{% trans "Logout" %}</a></li>
+    <li class="active"><a href="{% url 'controllers_index' %}">{% trans "My Domopi Boxes" %}</a></li>
+    <li class="active"><a href="{% url 'controller_add' %}">{% trans "Add a Domopi Box" %}</a></li>
+{% else %}
+	<li class="active"><a href="{% url 'auth_login' %}">{% trans "Login" %}</a></li>
+{% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+        </div>
+
+
+    <div class="row">
+        {% bootstrap_messages %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+</div><!-- /.container -->
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
