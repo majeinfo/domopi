@@ -49,6 +49,8 @@ class Metrics(EmbeddedDocument):
 class Sensor(Document):
     key = StringField(max_length=256)   # Controller Key
     zid = StringField(max_length=16)    # Controller ID (Z-Wave)
+    devid = StringField(max_length=16)
+    instid = StringField(max_length=16)
     sid = StringField(max_length=256)   # sensor ID
     description = StringField(max_length=256)
     devtype = StringField(max_length=64)
@@ -60,7 +62,7 @@ class Sensor(Document):
     meta = {
         'collection': 'sensors',
         'indexes': [
-            ('key', 'zid', 'sid'),
+            ('key', 'zid'),
         ]
     }
 
@@ -68,6 +70,8 @@ class Sensor(Document):
 class Command(Document):
     key = StringField(max_length=256)   # user Key
     zid = StringField(max_length=16)    # Controller ID
+    devid = StringField(max_length=16)
+    instid = StringField(max_length=16)
     sid = StringField(max_length=256)   # sensor ID
     cmd = StringField(max_length=512)   # JSON command
     create_time = DateTimeField(default=datetime.now)

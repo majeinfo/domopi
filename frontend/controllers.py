@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from . models import Controller
+import json
+from . models import Controller, Command
 from . forms import AddDeviceForm
 
 
@@ -35,7 +36,7 @@ def addAction(request):
                 controller.login = request.user.username
                 controller.save()
                 messages.info(request, _('The Controller has been attached to your Account'))
-                return HttpResponseRedirect('/frontend/controllers')
+                return redirect('controllers_index')
         else:
             messages.error(request, _('Invalid Form Values'))
     else:
@@ -45,7 +46,6 @@ def addAction(request):
 
 
 # Delete a Controller from User Account
-# TODO: check the Controller belongs to the User
 @login_required
 def deleteAction(request, key):
     controller = _checkOwner(request, key)
@@ -56,14 +56,31 @@ def deleteAction(request, key):
         controller.save()
         messages.info(request, _('The Controller has been removed from your Account'))
 
-    return render(request, 'controllers/index.html', {})
+    return redirect('controllers_index')
 
 
 # Add a User's Description to a Controller
-# TODO: check the Controller belongs to the User
 @login_required
 def setDescriptionAction(request, key):
-    return render(request, 'controllers/index.html', {})
+    if request.method == 'POST':
+        controller = _checkOwner(request, key)
+        if not controller:
+            messages.error(request, _('Invalid Parameters'))
+            return redirect('controllers_index')
+
+        newdescr = request.POST['newdescr']  # TODO: check injection
+        if newdescr:
+            controller.description = newdescr
+            controller.save()
+            cmd = Command.objects.create(
+                key = key,
+                zid = controller.zid,
+                cmd = json.dumps({ 'cmd': 'controller_setdescr', 'value': newdescr })
+            )
+            cmd.save()
+            messages.info(request, 'Command Sent - please wait 10 seconds before changes apply')
+
+    return redirect('controllers_index')
 
 
 # Check the User towards the key
