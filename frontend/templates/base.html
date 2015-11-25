@@ -33,6 +33,9 @@
 	<li class="active"><a href="{% url 'auth_logout' %}">{% trans "Logout" %}</a></li>
     <li class="active"><a href="{% url 'controllers_index' %}">{% trans "My Domopi Boxes" %}</a></li>
     <li class="active"><a href="{% url 'controller_add' %}">{% trans "Add a Domopi Box" %}</a></li>
+          {% if key %}
+            <li class="active"><a href="{% url 'automation' key=key %}">{% trans "Manage Automation Rules" %}</a></li>
+          {% endif %}
 {% else %}
 	<li class="active"><a href="{% url 'auth_login' %}">{% trans "Login" %}</a></li>
 {% endif %}
@@ -54,5 +57,6 @@
     <script src="{% static 'jquery/jquery-2.1.4.min.js' %}"></script>
     <script src="{% static 'js/bootbox.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    {% block more_js %}{% endblock %}
 </body>
 </html>

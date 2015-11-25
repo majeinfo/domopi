@@ -11,8 +11,11 @@
     {% csrf_token %}
 
     {% buttons %}
+        <a class="btn btn-default" href="{% url 'controllers_index' %}">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans "Cancel" %}
+        </a>
         <button type="submit" class="btn btn-primary">
-            {% bootstrap_icon "star" %} {% trans 'Register' %}
+            {% bootstrap_icon "ok" %} {% trans 'Register' %}
         </button>
     {% endbuttons %}
 </form>

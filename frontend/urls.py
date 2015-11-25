@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import views
-from frontend import auth, controllers, sensors
+from frontend import auth, controllers, sensors, automation
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
@@ -13,5 +13,10 @@ urlpatterns = [
     url(r'^sensors/command/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<devid>[^/]+)/(?P<instid>[^/]+)/(?P<sid>[^/]+)/(?P<cmd>.+)', sensors.commandAction, name='sensor_cmd'),
     url(r'^sensors/setdescr/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<devid>[^/]+)/(?P<instid>[^/]+)/(?P<sid>[^/]+)', sensors.setdescrAction, name='sensor_setdescr'),
     url(r'^sensors/(?P<key>[^/]+)', sensors.indexAction, name='sensors_list'),
+    url(r'^automation/add/(?P<key>[^/]+)', automation.addAction, name='rule_add'),
+    url(r'^automation/delete/(?P<key>[^/]+)/(?P<rid>.+)', automation.deleteAction, name='rule_delete'),
+    url(r'^automation/edit/(?P<key>[^/]+)/(?P<rid>.+)', automation.editAction, name='rule_edit'),
+    url(r'^automation/setdescr/(?P<key>[^/]+)/(?P<rid>.+)', automation.setDescrAction, name='rule_setdescr'),
+    url(r'^automation/(?P<key>[^/]+)', automation.indexAction, name='automation'),
 ]
 

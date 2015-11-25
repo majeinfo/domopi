@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from . models import Command, Sensor, Controller
+from . models import Command, Sensor, checkSensorOwner
 import json
 import collections
 
@@ -33,6 +33,7 @@ def indexAction(request, key):
             sensor.is_battery = True
 
     context = {
+        'key': key,
         'sensors': sensors,
         'tree': tree,
     }
@@ -43,17 +44,15 @@ def indexAction(request, key):
 @login_required
 def commandAction(request, key, zid, devid, instid, sid, cmd):
 
-    if not _checkOwner(request, key, zid):
+    if not checkSensorOwner(request.user.username, key, zid):
         messages.error(request, _('Invalid Parameters'))
         return redirect('controllers_index')
 
     cmd = Command.objects.create(
         key = key,
         zid = zid,
-        devid = devid,
-        instid = instid,
-        sid = sid,
-        cmd = json.dumps({ 'cmd': cmd })
+        cmd = cmd,
+        parms = json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid })
     )
     cmd.save()
     messages.info(request, 'Command Sent - please wait 10 seconds before changes apply')
@@ -65,7 +64,7 @@ def commandAction(request, key, zid, devid, instid, sid, cmd):
 def setdescrAction(request, key, zid, devid, instid, sid):
 
     if request.method == 'POST':
-        sensor = _checkOwner(request, key, zid, sid)
+        sensor = checkSensorOwner(request.user.username, key, zid, sid)
         if not sensor:
             messages.error(request, _('Invalid Parameters'))
             return redirect('controllers_index')
@@ -75,10 +74,8 @@ def setdescrAction(request, key, zid, devid, instid, sid):
             cmd = Command.objects.create(
                 key = key,
                 zid = zid,
-                devid = devid,
-                instid = instid,
-                sid = sid,
-                cmd = json.dumps({ 'cmd': 'setdescr', 'value': newdescr })
+                cmd = 'sensor_setdescr',
+                parms = json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid, 'value': newdescr })
             )
             cmd.save()
             sensor.description = newdescr
@@ -88,18 +85,3 @@ def setdescrAction(request, key, zid, devid, instid, sid):
     return HttpResponseRedirect('/frontend/sensors/' + key)
 
 
-# Check the User towards the key/zid/sid
-def _checkOwner(request, key, zid, devid=None, instid=None, sid=None):
-    try:
-        controller = Controller.objects.get(login=request.user.username, key=key, zid=zid)
-    except:
-        return None
-
-    if not devid or not instid or not sid: return controller
-
-    try:
-        sensor = Sensor.objects.get(key=key, devid=devid, instid=instid, sid=sid)
-    except:
-        return None
-
-    return sensor

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load formset_tags %}
+{% block title %}{% trans "Add a new Automation Rule" %}{% endblock %}
+{% block content %}
+
+<legend>{% trans 'Define your new Automation Rule' %}</legend>
+<form action="{% url 'rule_add' key=contr.key %}" method="post">
+    {% bootstrap_form form %}
+    {% bootstrap_form_errors form %}
+    {% csrf_token %}
+
+    {{ condition_formset.management_form }}
+    {% for condition_form in condition_formset %}
+        <div class="condition-formset">
+        {% bootstrap_form condition_form %}
+        {% bootstrap_form_errors condition_form %}
+        </div>
+    {% endfor %}
+
+    {{ action_formset.management_form }}
+    {% for action_form in action_formset %}
+        <div class="action-formset">
+        {% bootstrap_form action_form %}
+        {% bootstrap_form_errors action_form %}
+        </div>
+    {% endfor %}
+
+    {% buttons %}
+        <a class="btn btn-default" href="{% url 'automation' key=contr.key %}">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans "Cancel" %}
+        </a>
+        <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "ok" %} {% trans 'Register' %}
+        </button>
+    {% endbuttons %}
+</form>
+
+{% endblock %}
+
+{% block more_js %}
+<script src="{% static 'jquery/jquery.formset.js' %}"></script>
+<script>
+    $('.condition-formset').formset({
+        addText: "{% trans 'Add Action' %}",
+        deleteText: "{% trans 'Remove Action' %}"
+    });
+    $('.action-formset').formset({
+        addText: "{% trans 'Add Action' %}",
+        deleteText: "{% trans 'Remove Action' %}"
+    });
+</script>
+{% endblock %}

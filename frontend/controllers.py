@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import json
-from . models import Controller, Command
+from . models import Controller, Command, checkControllerOwner
 from . forms import AddDeviceForm
 
 
@@ -48,7 +48,7 @@ def addAction(request):
 # Delete a Controller from User Account
 @login_required
 def deleteAction(request, key):
-    controller = _checkOwner(request, key)
+    controller = checkControllerOwner(request.user.username, key)
     if not controller:
         messages.error(request, _('Invalid Parameters'))
     else:
@@ -63,7 +63,7 @@ def deleteAction(request, key):
 @login_required
 def setDescriptionAction(request, key):
     if request.method == 'POST':
-        controller = _checkOwner(request, key)
+        controller = checkControllerOwner(request.user.username, key)
         if not controller:
             messages.error(request, _('Invalid Parameters'))
             return redirect('controllers_index')
@@ -75,7 +75,8 @@ def setDescriptionAction(request, key):
             cmd = Command.objects.create(
                 key = key,
                 zid = controller.zid,
-                cmd = json.dumps({ 'cmd': 'controller_setdescr', 'value': newdescr })
+                cmd = 'controller_setdescr',
+                parms = json.dumps({ 'value': newdescr })
             )
             cmd.save()
             messages.info(request, 'Command Sent - please wait 10 seconds before changes apply')
@@ -83,11 +84,3 @@ def setDescriptionAction(request, key):
     return redirect('controllers_index')
 
 
-# Check the User towards the key
-def _checkOwner(request, key):
-    try:
-        controller = Controller.objects.get(login=request.user.username, key=key)
-    except:
-        return None
-
-    return controller
