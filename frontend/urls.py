@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^controllers/?$', controllers.indexAction, name='controllers_index'),
     url(r'^controllers/add', controllers.addAction, name='controller_add'),
     url(r'^controllers/setdescr/(?P<key>[^/]+)', controllers.setDescriptionAction, name='controller_setdescr'),
+    url(r'^controllers/viewlogs/(?P<key>[^/]+)', controllers.viewLogs, name='controller_viewlogs'),
     url(r'^controllers/delete/(?P<key>[^/]+)', controllers.deleteAction, name='controller_delete'),
     url(r'^sensors/command/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<devid>[^/]+)/(?P<instid>[^/]+)/(?P<sid>[^/]+)/(?P<cmd>.+)', sensors.commandAction, name='sensor_cmd'),
     url(r'^sensors/setdescr/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<devid>[^/]+)/(?P<instid>[^/]+)/(?P<sid>[^/]+)', sensors.setdescrAction, name='sensor_setdescr'),

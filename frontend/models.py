@@ -24,13 +24,30 @@ class User(Document):
 class Controller(Document):
     key = StringField(max_length=256)   # Controller Key
     zid = StringField(max_length=16)    # Controller ID (Z-Wave)
-    description = StringField(max_length=256)   # User's defined
-    login = StringField(max_length=64)
+    description = StringField(max_length=256, required=False)   # User's defined
+    login = StringField(max_length=64, required=False)
+    doversion = StringField(max_length=8, required=False)
+    timezone = StringField(max_length=32, required=False)
 
     meta = {
         'collection': 'controllers',
         'indexes': [
             'key',  # unique
+        ]
+    }
+
+
+# Log from Controller
+class Log(Document):
+    key = StringField(max_length=256)   # Controller Key
+    date = DateTimeField()
+    level = StringField(max_length=8)
+    msg = StringField()
+
+    meta = {
+        'collection': 'logs',
+        'indexes': [
+            ('key', 'date')
         ]
     }
 

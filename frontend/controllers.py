@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import json
-from . models import Controller, Command, checkControllerOwner
+from . models import Controller, Command, Log, checkControllerOwner
 from . forms import AddDeviceForm
 
 
@@ -84,3 +84,22 @@ def setDescriptionAction(request, key):
     return redirect('controllers_index')
 
 
+# Get the last logs of remote Controller
+@login_required
+def viewLogs(request, key):
+    controller = checkControllerOwner(request.user.username, key)
+    if not controller:
+        messages.error(request, _('Invalid Parameters'))
+    else:
+        logs = Log.objects.filter(key=key).order_by('-date')
+        cmd = Command.objects.create(
+            key = key,
+            zid = controller.zid,
+            cmd = 'controller_getlogs',
+            parms = json.dumps({ 'value': '' })
+        )
+        cmd.save()
+        messages.info(request, _('The Controller will send the Logs...'))
+        return render(request, 'controllers/viewlogs.html', { 'logs': logs })
+
+    return redirect('controllers_index')
