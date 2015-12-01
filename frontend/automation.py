@@ -55,24 +55,32 @@ def addAction(request, key):
                 rule.description = form.cleaned_data['description']
                 rule.conditions = []
                 rule.actions = []
+
                 for f in cformset:
                     condrule = RuleCondition()
                     condrule.condtype = f.cleaned_data['conditiontype']
-                    condrule.devid, condrule.instid, condrule.sid = Sensor.splitInternalName(f.cleaned_data['csensor_name'])
-                    condrule.value = f.cleaned_data['cvalue']
-                    condrule.testtype = f.cleaned_data['testtype']
-                    condrule.starttime = f.cleaned_data['starttime']
-                    condrule.endtime = f.cleaned_data['endtime']
-                    condrule.days = ''
-                    if not f.cleaned_data['alldays']:
-                        if f.cleaned_data['sunday']: condrule.days += '0'
-                        if f.cleaned_data['monday']: condrule.days += '1'
-                        if f.cleaned_data['tuesday']: condrule.days += '2'
-                        if f.cleaned_data['wednesday']: condrule.days += '3'
-                        if f.cleaned_data['thursday']: condrule.days += '4'
-                        if f.cleaned_data['friday']: condrule.days += '5'
-                        if f.cleaned_data['saturday']: condrule.days += '6'
+                    if condrule.condtype == 'thresholdcond':
+                        condrule.devid, condrule.instid, condrule.sid = Sensor.splitInternalName(f.cleaned_data['csensor_name'])
+                        condrule.value = f.cleaned_data['cvalue']
+                        condrule.testtype = f.cleaned_data['testtype']
+                    elif condrule.condtype == 'statuscond':
+                        condrule.devid, condrule.instid, condrule.sid = Sensor.splitInternalName(f.cleaned_data['csensor_name2'])
+                        condrule.value = f.cleaned_data['cvalue2']
+                        condrule.testtype = f.cleaned_data['testtype2']
+                    elif condrule.condtype == 'timecond':
+                        condrule.starttime = f.cleaned_data['starttime']
+                        condrule.endtime = f.cleaned_data['endtime']
+                        condrule.days = ''
+                        if not f.cleaned_data['alldays']:
+                            if f.cleaned_data['sunday']: condrule.days += '0'
+                            if f.cleaned_data['monday']: condrule.days += '1'
+                            if f.cleaned_data['tuesday']: condrule.days += '2'
+                            if f.cleaned_data['wednesday']: condrule.days += '3'
+                            if f.cleaned_data['thursday']: condrule.days += '4'
+                            if f.cleaned_data['friday']: condrule.days += '5'
+                            if f.cleaned_data['saturday']: condrule.days += '6'
                     rule.conditions.append(condrule)
+
                 for f in aformset:
                     actrule = RuleAction()
                     actrule.actiontype = f.cleaned_data['actiontype']

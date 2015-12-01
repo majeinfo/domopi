@@ -44,12 +44,59 @@
 <script src="{% static 'jquery/jquery.formset.js' %}"></script>
 <script>
     $('.condition-formset').formset({
-        addText: "{% trans 'Add Action' %}",
-        deleteText: "{% trans 'Remove Action' %}"
+        addText: "{% trans 'Add Condition' %}",
+        deleteText: "{% trans 'Remove Condition' %}"
     });
     $('.action-formset').formset({
         addText: "{% trans 'Add Action' %}",
         deleteText: "{% trans 'Remove Action' %}"
     });
+
+    function setElementVisibility(form_nu, elt, display_mode) {
+        var node = document.getElementById('id_form-' + form_nu + '-' + elt);
+        if (node.parentNode)
+            node.parentNode.style.display = display_mode;
+        else
+            node.style.display = display_mode;
+    }
+
+    function hideElement(form_nu, elt) {
+        setElementVisibility(form_nu, elt, 'None');
+    }
+
+    function showElement(form_nu, elt) {
+        setElementVisibility(form_nu, elt, 'Block');
+    }
+
+    function hideShowConditionFields(form_nu) {
+        var condtype = document.getElementById('id_form-' + form_nu + '-conditiontype');
+        var value = condtype.options[condtype.selectedIndex].value;
+        var valuefields = [ 'csensor_name', 'testtype', 'cvalue' ];
+        var timefields = [ 'starttime', 'endtime', 'alldays', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
+        var statusfields = [ 'csensor_name2', 'testtype2', 'cvalue2' ];
+
+        if (value == 'thresholdcond') {
+            for (i in valuefields) showElement(form_nu, valuefields[i]);
+            for (i in timefields) hideElement(form_nu, timefields[i]);
+            for (i in statusfields) hideElement(form_nu, statusfields[i]);
+        }
+        else if (value == 'timecond') {
+            for (i in valuefields) hideElement(form_nu, valuefields[i]);
+            for (i in timefields) showElement(form_nu, timefields[i]);
+            for (i in statusfields) hideElement(form_nu, statusfields[i]);
+        }
+        else if (value == 'statuscond') {
+            for (i in valuefields) hideElement(form_nu, valuefields[i]);
+            for (i in timefields) hideElement(form_nu, timefields[i]);
+            for (i in statusfields) showElement(form_nu, statusfields[i]);
+        }
+    }
+
+    hideShowConditionFields('0');
+
+    document.getElementById('id_form-0-conditiontype').onchange = function() {
+        hideShowConditionFields('0');
+    }
+
 </script>
 {% endblock %}
