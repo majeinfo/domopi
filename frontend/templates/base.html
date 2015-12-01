@@ -30,11 +30,12 @@
       <ul class="nav navbar-nav">
 
 {% if user.is_authenticated %}
-	<li class="active"><a href="{% url 'auth_logout' %}">{% trans "Logout" %}</a></li>
-    <li class="active"><a href="{% url 'controllers_index' %}">{% trans "My Domopi Boxes" %}</a></li>
-    <li class="active"><a href="{% url 'controller_add' %}">{% trans "Add a Domopi Box" %}</a></li>
+	<li class="inactive"><a href="{% url 'auth_logout' %}">{% trans "Logout" %}</a></li>
+    <li class="{{ menu_profile }}"><a href="{% url 'user_edit' %}">{% trans "My Profile" %}</a></li>
+    <li class="{{ menu_myboxes }}"><a href="{% url 'controllers_index' %}">{% trans "My Domopi Boxes" %}</a></li>
+    <li class="{{ menu_addbox }}"><a href="{% url 'controller_add' %}">{% trans "Add a Domopi Box" %}</a></li>
           {% if key %}
-            <li class="active"><a href="{% url 'automation' key=key %}">{% trans "Manage Automation Rules" %}</a></li>
+            <li class="{{ menu_rules }}"><a href="{% url 'automation' key=key %}">{% trans "Manage Automation Rules" %}</a></li>
           {% endif %}
 {% else %}
 	<li class="active"><a href="{% url 'auth_login' %}">{% trans "Login" %}</a></li>

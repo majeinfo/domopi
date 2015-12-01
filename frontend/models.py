@@ -6,10 +6,12 @@ from mongoengine import *
 # Not sure it is useful since Users are handled in MySQL
 class User(Document):
     login = StringField(max_length=64, unique=True)
-    #email = StringField(max_length=128)
     password = StringField(max_length=64)
-    #key = StringField(max_length=256, unique=True)          # à quoi ça sert maintenant ?
-    #controllers = ListField(StringField(max_length=32))     # still usefull with the key field of Controller ?
+    key = StringField(max_length=256, unique=True, required=False)          # still useful ?
+    controllers = ListField(StringField(max_length=32), required=False)     # still usefull with the key field of Controller ?
+    email = StringField(max_length=64, required=False)
+    timezone = StringField(max_length=32, required=False)
+    # TODO: info about subscription
 
     meta = {
         'collection': 'users',

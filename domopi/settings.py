@@ -56,6 +56,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'domopi.middleware.session.TimezoneMiddleware',
 )
 
 ROOT_URLCONF = 'domopi.urls'
@@ -99,8 +100,8 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 # TODO: must be changed
-LANGUAGE_CODE = 'fr-fr'
-TIME_ZONE = 'Europe/Paris'
+LANGUAGE_CODE = 'en'
+TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True

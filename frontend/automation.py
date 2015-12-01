@@ -21,6 +21,7 @@ def indexAction(request, key):
 
     rules = Rule.objects.filter(key=key)
     context = {
+        'menu_rules': 'active',
         'contr': controller,
         'rules': rules,
     }

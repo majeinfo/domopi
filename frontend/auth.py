@@ -1,9 +1,9 @@
 from django.utils.translation import ugettext as _
+from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
-import mongoengine
 from . forms import LoginForm
 from . models import User
 
@@ -18,6 +18,9 @@ def loginAction(request):
             if user is not None:
                 login(request, user)
                 messages.info(request, _('Authentication successfull'))
+                user = User.objects.get(login=n)
+                timezone.activate(user.timezone)
+                request.session['django_timezone'] = user.timezone if user.timezone else 'UTC'
                 return HttpResponseRedirect('/frontend/controllers')
             else:
                 messages.error(request, _('Authentication failed - either your Login or your Password is incorrect'))

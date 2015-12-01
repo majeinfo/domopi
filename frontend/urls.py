@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from . import views
-from frontend import auth, controllers, sensors, automation
+from frontend import auth, users, controllers, sensors, automation
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^auth/login$', auth.loginAction, name='auth_login'),
     url(r'^auth/logout$', auth.logoutAction, name='auth_logout'),
+    url(r'^users/edit$', users.editAction, name='user_edit'),
     url(r'^controllers/?$', controllers.indexAction, name='controllers_index'),
     url(r'^controllers/add', controllers.addAction, name='controller_add'),
     url(r'^controllers/setdescr/(?P<key>[^/]+)', controllers.setDescriptionAction, name='controller_setdescr'),

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Your Profile" %}{% endblock %}
+{% block content %}
+
+<legend>{% trans 'You can edit your Profile here' %}</legend>
+<form action="{% url 'user_edit' %}" method="post">
+    {% bootstrap_form form %}
+    {% bootstrap_form_errors form %}
+    {% csrf_token %}
+
+    {% buttons %}
+        <a class="btn btn-default" href="{% url 'controllers_index' %}">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans "Cancel" %}
+        </a>
+        <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "ok" %} {% trans 'Save' %}
+        </button>
+    {% endbuttons %}
+</form>
+
+{% endblock %}

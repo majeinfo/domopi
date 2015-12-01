@@ -13,6 +13,7 @@ from . forms import AddDeviceForm
 def indexAction(request):
     controllers = Controller.objects.filter(login=request.user.username)
     context = {
+        'menu_myboxes': 'active',
         'controllers': controllers,
     }
     return render(request, 'controllers/index.html', context)
@@ -42,7 +43,7 @@ def addAction(request):
     else:
         form = AddDeviceForm()
 
-    return render(request, 'controllers/add.html', { 'form': form })
+    return render(request, 'controllers/add.html', { 'form': form, 'menu_addbox': 'active' })
 
 
 # Delete a Controller from User Account
@@ -100,6 +101,6 @@ def viewLogs(request, key):
         )
         cmd.save()
         messages.info(request, _('The Controller will send the Logs...'))
-        return render(request, 'controllers/viewlogs.html', { 'logs': logs })
+        return render(request, 'controllers/viewlogs.html', { 'logs': logs, 'tzinfo': request.session.get('django_timezone') })
 
     return redirect('controllers_index')

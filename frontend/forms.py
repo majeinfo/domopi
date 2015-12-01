@@ -1,10 +1,16 @@
 from django.utils.translation import ugettext as _
 from django import forms
+import pytz
 from . models import Sensor
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=75, label=_('Your Login'))
     password = forms.CharField(widget=forms.PasswordInput, label=_('Your Password'))
+
+
+class EditProfileForm(forms.Form):
+    email = forms.EmailField(max_length=64, label=_('Your Email Address'))
+    timezone = forms.ChoiceField(choices=map(lambda x: (x,x), pytz.common_timezones), label=_('Your Timezone'))
 
 
 class AddDeviceForm(forms.Form):
