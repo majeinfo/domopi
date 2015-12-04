@@ -3,11 +3,11 @@
 {% load bootstrap3 %}
 {% load staticfiles %}
 {% load formset_tags %}
-{% block title %}{% trans "Add a new Automation Rule" %}{% endblock %}
+{% block title %}{% trans "Edit your Automation Rule" %}{% endblock %}
 {% block content %}
 
-<legend>{% trans 'Define your new Automation Rule' %}</legend>
-<form id="rule_form" action="{% url 'rule_add' key=contr.key %}" method="post">
+<legend>{% trans 'Edit your Automation Rule' %}</legend>
+<form id="rule_form" action="{% url 'rule_edit' key=contr.key rid=rule.description %}" method="post">
     {% bootstrap_form form %}
     {% bootstrap_form_errors form %}
     {% csrf_token %}
@@ -33,7 +33,7 @@
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans "Cancel" %}
         </a>
         <button type="submit" class="btn btn-primary">
-            {% bootstrap_icon "ok" %} {% trans 'Register' %}
+            {% bootstrap_icon "ok" %} {% trans 'Save' %}
         </button>
     {% endbuttons %}
 </form>

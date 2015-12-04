@@ -29,7 +29,7 @@
                 </form>
             </td>
             <td>
-                <ab class="btn btn-primary" href="{% url 'rule_edit' key=contr.key rid=rule.description %}">{% trans "Edit" %}</ab>
+                <a class="btn btn-primary" href="{% url 'rule_edit' key=contr.key rid=rule.description %}">{% trans "Edit" %}</a>
                 <a class="btn btn-danger" href="{% url 'rule_delete' key=contr.key rid=rule.description %}" onclick="return confirmBox();">{% trans "Delete" %}</a>
             </td>
         </tr>

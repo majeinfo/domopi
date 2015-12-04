@@ -94,6 +94,10 @@ class Sensor(Document):
         return self.devid + '-' + self.instid + '-' + self.sid
 
     @staticmethod
+    def buildInternalName(devid, instid, sid):
+        return devid + '-' + instid + '-' + sid
+
+    @staticmethod
     def splitInternalName(iname):
         parts = iname.split('-')
         return parts[0], parts[1], '-'.join(parts[2:])
@@ -117,10 +121,15 @@ class Command(Document):
 
 # Rules definition
 class RuleCondition(EmbeddedDocument):
+    THRESHOLD = 'thresholdcond'
+    TIME = 'timecond'
+    STATUS = 'statuscond'
+    STATUS_ON = 'ON'
+    STATUS_OFF = 'OFF'
     condtype = StringField(max_length=32)
-    devid = StringField(max_length=16)
-    instid = StringField(max_length=16)
-    sid = StringField(max_length=256)
+    devid = StringField(max_length=16, required=False)
+    instid = StringField(max_length=16, required=False)
+    sid = StringField(max_length=256, required=False)
     value = StringField(max_length=256, required=False)
     testtype = StringField(max_length=4, required=False)
     starttime = StringField(max_length=16, required=False)
@@ -128,11 +137,17 @@ class RuleCondition(EmbeddedDocument):
     days = StringField(max_length=8, required=False)
 
 class RuleAction(EmbeddedDocument):
+    SENSORCMD = 'sensorcmd'
+    EMAILCMD = 'emailcmd'
+    CMD_ON = 'ON'
+    CMD_OFF = 'OFF'
     actiontype = StringField(max_length=32)
-    devid = StringField(max_length=16)
-    instid = StringField(max_length=16)
-    sid = StringField(max_length=256)
-    value = StringField(max_length=256)
+    devid = StringField(max_length=16, required=False)
+    instid = StringField(max_length=16, required=False)
+    sid = StringField(max_length=256, required=False)
+    value = StringField(max_length=256, required=False)
+    email = StringField(max_length=64, required=False)
+    subject = StringField(max_length=256, required=False)
 
 class Rule(Document):
     key = StringField(max_length=256)   # user Key

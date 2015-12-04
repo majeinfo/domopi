@@ -99,7 +99,6 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-# TODO: must be changed
 LANGUAGE_CODE = 'en'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -139,3 +138,41 @@ AUTHENTIFICATION_BACKENDS = (
 #MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
 #AUTH_USER_MODEL = 'mongo_auth.MongoUser'
 #USER_CLASS = 'mongo_auth.contrib.models.Use'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+        },
+    'handlers': {
+        'file':{
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/domopi/domopi.log',
+            'formatter': 'verbose'
+        },
+        #'db':{
+        #    'level': 'ERROR',
+        #    'class': 'mydjangoapp.loggers.MyDbLogHandler',
+        #    'formatter': 'verbose'
+        #}
+    },
+    'loggers': {
+        'domopi': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': False,
+            },
+        #'myapplog': {
+        #    'handlers': ['db'],
+        #    'level': 'DEBUG',
+        #    'propagate': False,
+        #    }
+    }
+}
