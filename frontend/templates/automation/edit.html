@@ -99,7 +99,7 @@
         var actiontype = document.getElementById('id_action-' + form_nu + '-actiontype');
         var value = actiontype.options[actiontype.selectedIndex].value;
         var actionfields = [ 'asensor_name', 'avalue' ];
-        var emailfields = [ 'email', 'subject' ];
+        var emailfields = [ 'email', 'subject', 'content' ];
 
         if (value == 'sensorcmd') {
             for (i in actionfields) showElement(prefix, form_nu, actionfields[i]);

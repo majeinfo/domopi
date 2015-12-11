@@ -9,7 +9,8 @@ class LoginForm(forms.Form):
 
 
 class EditProfileForm(forms.Form):
-    email = forms.EmailField(max_length=64, label=_('Your Email Address'))
+    email = forms.EmailField(max_length=64, label=_('Your Email Address'), help_text=_("It will only be used to send you Alert Mails"))
+    phonenu = forms.CharField(max_length=16, required=False, label=_("Your Mobile Phone Number"), help_text=_("It may only be used to send you SMS"))
     timezone = forms.ChoiceField(choices=map(lambda x: (x,x), pytz.common_timezones), label=_('Your Timezone'))
 
 

@@ -15,10 +15,12 @@ def editAction(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST)
         if form.is_valid():
+            # TODO: les infos doivent etre redescendues dans tous les domopi
             e = form.cleaned_data['email']
             request.user.email = e
             request.user.save()
             user.email = e
+            user.phonenu = form.cleaned_data['phonenu']
             user.timezone = form.cleaned_data['timezone']
             user.save()
             request.session['django_timezone'] = user.timezone
