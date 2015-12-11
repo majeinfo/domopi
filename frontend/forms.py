@@ -34,12 +34,12 @@ def create_RuleConditionForm(key):
         csensor_name = forms.ChoiceField(
             (tuple((x.getInternalName(),x.description))
                 for x in sensors
-                if x.devtype == Sensor.TYPE_BATTERY or x.devtype == Sensor.TYPE_SENSOR_BINARY or x.devtype == Sensor.TYPE_SENSOR_MULTILEVEL),
+                if x.devtype == Sensor.TYPE_BATTERY or x.devtype == Sensor.TYPE_SENSOR_MULTILEVEL),
             label=_('Sensor Name'))
         csensor_name2 = forms.ChoiceField(
             (tuple((x.getInternalName(),x.description))
                 for x in sensors
-                if x.devtype == Sensor.TYPE_SWITCH),
+                if x.devtype == Sensor.TYPE_SWITCH or x.devtype == Sensor.TYPE_SENSOR_BINARY),
             label=_('Sensor Name'))
 
         testtype = forms.ChoiceField(choices=TESTOP, label=_('Value Comparison'), required=False)
@@ -95,6 +95,7 @@ def create_RuleActionForm(key):
 
         email = forms.CharField(label=_('To Email Address'), required=False)
         subject = forms.CharField(label=_('Email Subject'), help_text=_('This is the Subject of the email that will be sent'), required=False)
+        content = forms.CharField(label=_('Email Content'), help_text=_('This is the Content of the email that will be sent'), widget=forms.Textarea, required=False)
 
     return RuleActionForm
 

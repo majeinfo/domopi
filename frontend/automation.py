@@ -73,6 +73,7 @@ def _updateRuleFromForm(rule, controller, key, form, cformset, aformset):
         elif actrule.actiontype == RuleAction.EMAILCMD:
             actrule.email = f.cleaned_data['email']
             actrule.subject = f.cleaned_data['subject']
+            actrule.content = f.cleaned_data['content']
         rule.actions.append(actrule)
 
 
@@ -196,6 +197,7 @@ def editAction(request, key, rid):
             elif action.actiontype == RuleAction.EMAILCMD:
                 d['email'] = action.email
                 d['subject'] = action.subject
+                d['content'] = action.content
             actions.append(d)
 
     logger.debug(conds)

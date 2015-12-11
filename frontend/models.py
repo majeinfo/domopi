@@ -148,6 +148,7 @@ class RuleAction(EmbeddedDocument):
     value = StringField(max_length=256, required=False)
     email = StringField(max_length=64, required=False)
     subject = StringField(max_length=256, required=False)
+    content = StringField(max_length=256, required=False)
 
 class Rule(Document):
     key = StringField(max_length=256)   # user Key
