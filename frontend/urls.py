@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^auth/login$', auth.loginAction, name='auth_login'),
     url(r'^auth/logout$', auth.logoutAction, name='auth_logout'),
+    url(r'^auth/subscribe$', auth.subscribeAction, name='auth_subscribe'),
     url(r'^users/edit$', users.editAction, name='user_edit'),
     url(r'^controllers/?$', controllers.indexAction, name='controllers_index'),
     url(r'^controllers/add', controllers.addAction, name='controller_add'),

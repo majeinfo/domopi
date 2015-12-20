@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'bootstrap3',
     'djangoformsetjs',
+    'captcha',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -131,10 +132,10 @@ mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 #MONGO_SESSIONS_COLLECTION = 'mongo_sessions'
 #MONGO_SESSIONS_TTL = 60 * 15
 
-AUTHENTIFICATION_BACKENDS = (
-    #'mongoengine.django.auth.MongoEngineBackend',
-    #'mongo_auth.backends.MongoEngineBackend',
-)
+#AUTHENTIFICATION_BACKENDS = (
+#    'mongoengine.django.auth.MongoEngineBackend',
+#    'mongo_auth.backends.MongoEngineBackend',
+#)
 #MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
 #AUTH_USER_MODEL = 'mongo_auth.MongoUser'
 #USER_CLASS = 'mongo_auth.contrib.models.Use'
@@ -176,3 +177,7 @@ LOGGING = {
         #    }
     }
 }
+
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+CAPTCHA_NOISE_FUNCTIONS = ()    # ('captcha.helpers.noise_arcs','captcha.helpers.noise_dots',)
+#CAPTCHA_FLITE_PATH = ''

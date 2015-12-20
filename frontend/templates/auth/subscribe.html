@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Login Page" %}{% endblock %}
+{% block title %}{% trans "Sign Up Page" %}{% endblock %}
 {% block content %}
 
-<legend>{% trans "Connect to your Account:" %}</legend>
-<form action="{% url 'auth_login' %}" method="post">
+<legend>{% trans "Create your Account:" %}</legend>
+<form action="{% url 'auth_subscribe' %}" method="post">
     {% bootstrap_form form %}
     {% bootstrap_form_errors form %}
     {% csrf_token %}
     {% buttons %}
         <button type="submit" class="btn btn-primary">
-            {% bootstrap_icon "star" %} {% trans 'Connect' %}
+            {% bootstrap_icon "star" %} {% trans 'Sign Up' %}
         </button>
     {% endbuttons %}
 </form>

@@ -1,11 +1,19 @@
 from django.utils.translation import ugettext as _
 from django import forms
+from captcha.fields import CaptchaField
 import pytz
 from . models import Sensor, RuleCondition, RuleAction
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=75, label=_('Your Login'))
     password = forms.CharField(widget=forms.PasswordInput, label=_('Your Password'))
+
+
+class SubscribeForm(forms.Form):
+    username = forms.CharField(max_length=75, label=_('Your Login'))
+    email = forms.EmailField(max_length=64, label=_('Your Email Address'), help_text=_("It will only be used to send you Alert Mails"))
+    password = forms.CharField(widget=forms.PasswordInput, label=_('Your Password'))
+    password2 = forms.CharField(widget=forms.PasswordInput, label=_('Enter your Password again'))
 
 
 class EditProfileForm(forms.Form):
@@ -16,7 +24,7 @@ class EditProfileForm(forms.Form):
 
 class AddDeviceForm(forms.Form):
     key = forms.CharField(max_length=80, label=_('Controller ID'), help_text=_('This is the value written on you Domopi Box'))
-
+    captcha = CaptchaField(label=_('Captcha:'), help_text=_("Please, write the Captcha value to make sure you're not a Robot !"))
 
 class AddRuleForm(forms.Form):
     description = forms.CharField(max_length=256, label=_('Description'), help_text=_('This is the free description of the Automation Rule'))

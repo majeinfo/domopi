@@ -7,8 +7,8 @@ from mongoengine import *
 class User(Document):
     login = StringField(max_length=64, unique=True)
     password = StringField(max_length=64)
-    key = StringField(max_length=256, unique=True, required=False)          # still useful ?
-    controllers = ListField(StringField(max_length=32), required=False)     # still usefull with the key field of Controller ?
+    #key = StringField(max_length=256, unique=True, required=False)          # still useful ?
+    #controllers = ListField(StringField(max_length=32), required=False)     # still usefull with the key field of Controller ?
     email = StringField(max_length=64, required=False)
     timezone = StringField(max_length=32, required=False, default='UTC')
     phonenu = StringField(max_length=16, required=False)
@@ -22,7 +22,7 @@ class User(Document):
     }
 
 
-# This is just an assocaition between a zid (Z-Wave ID) and a key
+# This is just an association between a zid (Z-Wave ID) and a key
 # The key is displayed on the R-Pi package - the End User associates the Controller in his Account
 class Controller(Document):
     key = StringField(max_length=256)   # Controller Key
