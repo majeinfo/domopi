@@ -27,6 +27,7 @@ class User(Document):
 class Controller(Document):
     key = StringField(max_length=256)   # Controller Key
     zid = StringField(max_length=16)    # Controller ID (Z-Wave)
+    localip = StringField(max_length=16, required=False)
     description = StringField(max_length=256, required=False)   # User's defined
     login = StringField(max_length=64, required=False)
     doversion = StringField(max_length=8, required=False)

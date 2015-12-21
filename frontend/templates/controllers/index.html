@@ -11,10 +11,11 @@
 {% else %}
 <table class="table">
     <tbody class="table-striped">
-        <tr><th>{% trans "Controller Key" %}</th><th>{% trans "Version" %}</th><th>{% trans "Description" %}</th><th>{% trans "Action" %}</th></tr>
+        <tr><th>{% trans "Controller Key" %}</th><th>{% trans "IP Address" %}</th><th>{% trans "Version" %}</th><th>{% trans "Description" %}</th><th>{% trans "Action" %}</th></tr>
         {% for contr in controllers %}
         <tr>
             <td>{{ contr.key }}</td>
+            <td>{{ contr.localip }}</td>
             <td>{% if contr.doversion %}{{ contr.doversion }}{% else %}?{% endif %}</td>
             <td>
                 <form method="post" action="{% url 'controller_setdescr' key=contr.key %}">
