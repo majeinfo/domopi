@@ -18,15 +18,16 @@ def loginAction(request):
             user = authenticate(username=n, password=p, request=request)
             if user is not None:
                 login(request, user)
-                messages.info(request, _('Authentication successfull'))
                 try:
                     user = User.objects.get(login=n)
-                    timezone = user.timezone if user.timezone else 'UTC'
-                    timezone.activate(timezone)
-                    request.session['django_timezone'] = timezone
+                    tz = user.timezone if user.timezone else 'UTC'
+                    timezone.activate(tz)
+                    request.session['django_timezone'] = tz
+                    messages.info(request, _('Authentication successfull'))
                     return HttpResponseRedirect('/frontend/controllers')
-                except:
+                except Exception as e:
                     messages.error(request, _('Authentication failed - internal error, please contact the Technical Support'))
+                    #messages.error(request, e)
             else:
                 messages.error(request, _('Authentication failed - either your Login or your Password is incorrect'))
         else:
