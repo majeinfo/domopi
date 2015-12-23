@@ -11,7 +11,10 @@ class User(Document):
     #controllers = ListField(StringField(max_length=32), required=False)     # still usefull with the key field of Controller ?
     email = StringField(max_length=64, required=False)
     timezone = StringField(max_length=32, required=False, default='UTC')
+    address = StringField(max_length=128, required=False)
     phonenu = StringField(max_length=16, required=False)
+    lat = FloatField(required=False)
+    lng = FloatField(required=False)
     # TODO: info about subscription
 
     meta = {

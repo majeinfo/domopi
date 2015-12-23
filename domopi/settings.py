@@ -181,3 +181,5 @@ LOGGING = {
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 CAPTCHA_NOISE_FUNCTIONS = ()    # ('captcha.helpers.noise_arcs','captcha.helpers.noise_dots',)
 #CAPTCHA_FLITE_PATH = ''
+
+GOOGLE_API_KEY = 'AIzaSyCoN8ZvMP77YDDnpVTWgCOxvgHvsaxBjh4'
