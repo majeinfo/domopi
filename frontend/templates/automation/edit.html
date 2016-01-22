@@ -70,21 +70,31 @@
         var valuefields = [ 'csensor_name', 'testtype', 'cvalue' ];
         var timefields = [ 'starttime', 'endtime', 'alldays', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
         var statusfields = [ 'csensor_name2', 'testtype2', 'cvalue2' ];
+        var suntimefields = [ 'sunevt', 'sunoffset', 'sundelay', 'alldays', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
 
         if (value == 'thresholdcond') {
             for (i in valuefields) showElement(prefix, form_nu, valuefields[i]);
             for (i in timefields) hideElement(prefix, form_nu, timefields[i]);
             for (i in statusfields) hideElement(prefix, form_nu, statusfields[i]);
+            for (i in suntimefields) hideElement(prefix, form_nu, suntimefields[i]);
         }
         else if (value == 'timecond') {
             for (i in valuefields) hideElement(prefix, form_nu, valuefields[i]);
-            for (i in timefields) showElement(prefix, form_nu, timefields[i]);
             for (i in statusfields) hideElement(prefix, form_nu, statusfields[i]);
+            for (i in suntimefields) hideElement(prefix, form_nu, suntimefields[i]);
+            for (i in timefields) showElement(prefix, form_nu, timefields[i]);
         }
         else if (value == 'statuscond') {
             for (i in valuefields) hideElement(prefix, form_nu, valuefields[i]);
             for (i in timefields) hideElement(prefix,form_nu, timefields[i]);
             for (i in statusfields) showElement(prefix, form_nu, statusfields[i]);
+            for (i in suntimefields) hideElement(prefix, form_nu, suntimefields[i]);
+        }
+        else if (value == 'suntimecond') {
+            for (i in valuefields) hideElement(prefix, form_nu, valuefields[i]);
+            for (i in timefields) hideElement(prefix,form_nu, timefields[i]);
+            for (i in statusfields) hideElement(prefix, form_nu, statusfields[i]);
+            for (i in suntimefields) showElement(prefix, form_nu, suntimefields[i]);
         }
     }
 

@@ -129,8 +129,13 @@ class RuleCondition(EmbeddedDocument):
     THRESHOLD = 'thresholdcond'
     TIME = 'timecond'
     STATUS = 'statuscond'
+    SUNTIME = 'suntimecond'
     STATUS_ON = 'ON'
     STATUS_OFF = 'OFF'
+    SUNRISE = 'sunrise'
+    SUNSET = 'sunset'
+    AFTER = 'after'
+    BEFORE = 'before'
     condtype = StringField(max_length=32)
     devid = StringField(max_length=16, required=False)
     instid = StringField(max_length=16, required=False)
@@ -140,6 +145,9 @@ class RuleCondition(EmbeddedDocument):
     starttime = StringField(max_length=16, required=False)
     endtime = StringField(max_length=16, required=False)
     days = StringField(max_length=8, required=False)
+    sunevt = StringField(max_length=8, required=False)     # sunrise or sunset
+    sunoffset = StringField(max_length=8, required=False)      # after or before
+    sundelay = IntField(required=False)
 
 class RuleAction(EmbeddedDocument):
     SENSORCMD = 'sensorcmd'

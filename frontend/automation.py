@@ -62,6 +62,19 @@ def _updateRuleFromForm(rule, controller, key, form, cformset, aformset):
                 if f.cleaned_data['thursday']: condrule.days += '4'
                 if f.cleaned_data['friday']: condrule.days += '5'
                 if f.cleaned_data['saturday']: condrule.days += '6'
+        elif condrule.condtype == RuleCondition.SUNTIME:
+            condrule.sunevt = f.cleaned_data['sunevt']
+            condrule.sunoffset = f.cleaned_data['sunoffset']
+            condrule.sundelay = f.cleaned_data['sundelay']
+            condrule.days = ''
+            if not f.cleaned_data['alldays']:
+                if f.cleaned_data['sunday']: condrule.days += '0'
+                if f.cleaned_data['monday']: condrule.days += '1'
+                if f.cleaned_data['tuesday']: condrule.days += '2'
+                if f.cleaned_data['wednesday']: condrule.days += '3'
+                if f.cleaned_data['thursday']: condrule.days += '4'
+                if f.cleaned_data['friday']: condrule.days += '5'
+                if f.cleaned_data['saturday']: condrule.days += '6'
         rule.conditions.append(condrule)
 
     for f in aformset:
@@ -183,6 +196,18 @@ def editAction(request, key, rid):
                 d['thursday'] = True if '4' in cond.days else False
                 d['friday'] = True if '5' in cond.days else False
                 d['saturday'] = True if '6' in cond.days else False
+            elif cond.condtype == RuleCondition.SUNTIME:
+                d['sunevt'] = cond.sunevt
+                d['sunoffset'] = cond.sunoffset
+                d['sundelay'] = cond.sundelay
+                d['alldays'] = True if not cond.days else False
+                d['sunday'] = True if '0' in cond.days else False
+                d['monday'] = True if '1' in cond.days else False
+                d['tuesday'] = True if '2' in cond.days else False
+                d['wednesday'] = True if '3' in cond.days else False
+                d['thursday'] = True if '4' in cond.days else False
+                d['friday'] = True if '5' in cond.days else False
+                d['saturday'] = True if '6' in cond.days else False
             conds.append(d)
 
         action_formset = formsets.formset_factory(create_RuleActionForm(key), formset=RuleActionFormSet, extra=0)
@@ -221,8 +246,9 @@ def deleteAction(request, key, rid):
 
     try:
         rule = Rule.objects.get(key=key, description=rid)
-        _sendRulesBack(key, rule.zid)
+        zid = rule.zid
         Rule.objects.filter(key=key, description=rid).delete()
+        _sendRulesBack(key, zid)
         messages.info(request, _('The Rule has been removed'))
     except Exception as e:
         messages.error(request, _('Sorry, an internal software error occurred'))

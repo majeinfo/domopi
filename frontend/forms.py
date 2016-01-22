@@ -34,10 +34,13 @@ class AddRuleForm(forms.Form):
 # Warning: field names of RuleCondition and RuleAction must differ or we should use the 'prefix' parameter
 def create_RuleConditionForm(key):
     class RuleConditionForm(forms.Form):
-        TYPE = ( (RuleCondition.THRESHOLD, _('Sensor Value Threshold')), (RuleCondition.TIME, _('Time Condition')), ((RuleCondition.STATUS, _('Sensor Status'))))
+        TYPE = ( (RuleCondition.THRESHOLD, _('Sensor Value Threshold')), (RuleCondition.TIME, _('Time Condition')),
+                 (RuleCondition.STATUS, _('Sensor Status')), (RuleCondition.SUNTIME, _('Suntime Condition')) )
         TESTOP = ( ('==', '='), ('!=', '<>'), ('>', '>'), ('>=', '=>'), ('<', '<'), ('<=', '<=') )
         TESTOP2 = ( ('==', '='), ('!=', '<>') )
-        COMMANDS = ( (RuleCondition.STATUS_ON, _('On')), (RuleCondition.STATUS_OFF, _('Off')))
+        COMMANDS = ( (RuleCondition.STATUS_ON, _('On')), (RuleCondition.STATUS_OFF, _('Off')) )
+        SUNEVTS = ( (RuleCondition.SUNRISE, _('Sunrise')), (RuleCondition.SUNSET, _('Sunset')) )
+        SUNOFFSET = ( (RuleCondition.BEFORE, _('Before')), (RuleCondition.AFTER, _('After')) )
 
         conditiontype = forms.ChoiceField(choices=TYPE, label=_('Condition Type'))
         sensors = Sensor.objects.filter(key=key)
@@ -57,6 +60,10 @@ def create_RuleConditionForm(key):
 
         cvalue = forms.CharField(max_length=32, label=_('Threshold Value'), help_text=_('This is the Value the Sensor must be compared with'), required=False)
         cvalue2 = forms.ChoiceField(choices=COMMANDS, label=_('Status Value'))
+
+        sundelay = forms.IntegerField(label=_('Delay'), help_text=_('You can trigger this Condition before or after a "delay" given in minutes'))
+        sunoffset = forms.ChoiceField(choices=SUNOFFSET, label=_('Offset'))
+        sunevt = forms.ChoiceField(choices=SUNEVTS, label=_('Sun Event'))
 
         starttime = forms.CharField(label=_('Start Time'), help_text=_('This a time given with the format HH:MM'), required=False)
         endtime = forms.CharField(label=_('End Time'), help_text=_('This a time given with the format HH:MM'), required=False)
