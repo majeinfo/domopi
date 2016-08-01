@@ -152,10 +152,17 @@ LOGGING = {
         },
         },
     'handlers': {
-        'file':{
+        # 'file':{
+        #     'level': 'DEBUG',
+        #     'class': 'logging.FileHandler',
+        #     'filename': '/var/log/domopi/domopi.log',
+        #     'formatter': 'verbose'
+        # },
+        'syslog': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/domopi/domopi.log',
+            'class': 'logging.handlers.SysLogHandler',
+            'facility': 'local5',
+            'address': '/dev/log',
             'formatter': 'verbose'
         },
         #'db':{
@@ -166,7 +173,7 @@ LOGGING = {
     },
     'loggers': {
         'domopi': {
-            'handlers': ['file'],
+            'handlers': [ 'syslog' ],
             'level': 'DEBUG',
             'propagate': False,
             },
