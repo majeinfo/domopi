@@ -116,7 +116,7 @@ STATIC_URL = '/static/'
 
 _MONGODB_USER = 'domopi'
 _MONGODB_PASSWORD = 'domopi'
-_MONGODB_HOST = 'localhost'
+_MONGODB_HOST = 'mongoserver'
 _MONGODB_NAME = 'domopi'
 _MONGODB_DATABASE_HOST = 'mongodb://%s:%s@%s/%s' % (_MONGODB_USER, _MONGODB_PASSWORD, _MONGODB_HOST, _MONGODB_NAME)
 
