@@ -165,6 +165,12 @@ LOGGING = {
             'address': '/dev/log',
             'formatter': 'verbose'
         },
+        'console': {
+            'level': 'DEBUG',
+            #'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
         #'db':{
         #    'level': 'ERROR',
         #    'class': 'mydjangoapp.loggers.MyDbLogHandler',
@@ -173,7 +179,7 @@ LOGGING = {
     },
     'loggers': {
         'domopi': {
-            'handlers': [ 'syslog' ],
+            'handlers': [ 'console' ],
             'level': 'DEBUG',
             'propagate': False,
             },
