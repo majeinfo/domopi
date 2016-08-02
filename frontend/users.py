@@ -53,7 +53,7 @@ def editAction(request):
                     key = contr.key,
                     zid = contr.zid,
                     cmd = 'user_def',
-                    parms = json.dumps({ 'user': { 'address': user.address, 'phonenu': user.phonenu, 'email': user.email, 'tz': user.timezone } })
+                    parms = json.dumps({ 'user': { 'address': user.address, 'phonenu': user.phonenu, 'email': user.email, 'tz': user.timezone, 'lat': user.lat, 'lng': user.lng } })
                 )
                 cmd.save()
         else:

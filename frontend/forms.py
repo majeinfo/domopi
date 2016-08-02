@@ -61,9 +61,9 @@ def create_RuleConditionForm(key):
         cvalue = forms.CharField(max_length=32, label=_('Threshold Value'), help_text=_('This is the Value the Sensor must be compared with'), required=False)
         cvalue2 = forms.ChoiceField(choices=COMMANDS, label=_('Status Value'))
 
-        sundelay = forms.IntegerField(label=_('Delay'), help_text=_('You can trigger this Condition before or after a "delay" given in minutes'))
-        sunoffset = forms.ChoiceField(choices=SUNOFFSET, label=_('Offset'))
-        sunevt = forms.ChoiceField(choices=SUNEVTS, label=_('Sun Event'))
+        sundelay = forms.IntegerField(label=_('Delay'), help_text=_('You can trigger this Condition before or after a "delay" given in minutes'), required=False)
+        sunoffset = forms.ChoiceField(choices=SUNOFFSET, label=_('Offset'), required=False)
+        sunevt = forms.ChoiceField(choices=SUNEVTS, label=_('Sun Event'), required=False)
 
         starttime = forms.CharField(label=_('Start Time'), help_text=_('This a time given with the format HH:MM'), required=False)
         endtime = forms.CharField(label=_('End Time'), help_text=_('This a time given with the format HH:MM'), required=False)

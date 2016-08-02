@@ -179,15 +179,10 @@ LOGGING = {
     },
     'loggers': {
         'domopi': {
-            'handlers': [ 'console' ],
+            'handlers': [ 'console', 'syslog' ],
             'level': 'DEBUG',
             'propagate': False,
-            },
-        #'myapplog': {
-        #    'handlers': ['db'],
-        #    'level': 'DEBUG',
-        #    'propagate': False,
-        #    }
+        },
     }
 }
 

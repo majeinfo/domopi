@@ -142,8 +142,8 @@ class RuleCondition(EmbeddedDocument):
     sid = StringField(max_length=256, required=False)
     value = StringField(max_length=256, required=False)
     testtype = StringField(max_length=4, required=False)
-    starttime = StringField(max_length=16, required=False)
-    endtime = StringField(max_length=16, required=False)
+    starttime = StringField(max_length=16, required=False)  # in localtime because of daylight
+    endtime = StringField(max_length=16, required=False)    # idem
     days = StringField(max_length=8, required=False)
     sunevt = StringField(max_length=8, required=False)     # sunrise or sunset
     sunoffset = StringField(max_length=8, required=False)      # after or before
