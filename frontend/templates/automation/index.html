@@ -29,8 +29,13 @@
                 </form>
             </td>
             <td>
-                <a class="btn btn-primary" href="{% url 'rule_edit' key=contr.key rid=rule.description %}">{% trans "Edit" %}</a>
-                <a class="btn btn-danger" href="{% url 'rule_delete' key=contr.key rid=rule.description %}" onclick="return confirmBox();">{% trans "Delete" %}</a>
+                {% if rule.is_active %}
+                <a class="btn btn-success" href="{% url 'rule_disable' key=contr.key rid=rule.description|urlencode %}">{% trans "Disable" %}</a>
+                {% else %}
+                <a class="btn btn-success" href="{% url 'rule_enable' key=contr.key rid=rule.description|urlencode %}">{% trans "Enable" %}</a>
+                {% endif %}
+                <a class="btn btn-primary" href="{% url 'rule_edit' key=contr.key rid=rule.description|urlencode %}">{% trans "Edit" %}</a>
+                <a class="btn btn-danger" href="{% url 'rule_delete' key=contr.key rid=rule.description|urlencode %}" onclick="return confirmBox();">{% trans "Delete" %}</a>
             </td>
         </tr>
         {% endfor %}

@@ -30,11 +30,13 @@
             {% endif %}
             {% trans 'Battery' %} {{ device.has_battery }} %
         {% endif %}
+        {% if device.has_hidden %}<a class="btn btn-primary btn-xs" href="{% url 'sensor_all_unhide' key=device.key zid=device.zid devid=devid %}">{% trans "Show All Sensors" %}</a>{% endif %}
     </th></tr>
     <tr><td>
         <ul class="list-group">
         {% for instid,instance in device.items %}
             {% for sid,sensor in instance.items %}
+              {% if not sensor.hidden %}
                 {% if not sensor.is_battery %}
                     <li class="list-group-item">
                         <table width="100%"><tr><td width="20%">
@@ -62,6 +64,9 @@
                                 {% endif %}
                                 &nbsp;{{ sensor.devtype }}
                             </td>
+                            <td width="10%">
+                                <a class="btn btn-primary btn-xs" href="{% url 'sensor_hide' key=device.key zid=sensor.zid devid=sensor.devid instid=sensor.instid sid=sensor.sid %}">{% trans "Hide" %}</a>
+                            </td>
                             <td width="20%">{{ sensor.last_update }}</td>
         <td width="20%">
             {% if sensor.metrics.probeTitle %}
@@ -73,7 +78,7 @@
                 {% if sensor.metrics.on_off %} {% trans "ON" %} {% else %} {% trans "OFF" %} {% endif %}
             {% endif %}
         </td>
-        <td width="20%">
+        <td width="10%">
             {% if sensor.devtype == 'switchBinary' %}
                 {% if sensor.metrics.on_off %}
                     <a class="btn btn-danger" href="{% url 'sensor_cmd' key=sensor.key zid=sensor.zid devid=sensor.devid instid=sensor.instid sid=sensor.sid cmd='off' %}">{% trans "OFF" %}</a>
@@ -84,7 +89,8 @@
         </td>
                         </tr></table>
                     </li>
-                {% endif %}
+                {% endif %} <!-- not a battery -->
+              {% endif %} <!-- hidden -->
             {% endfor %}
         {% endfor %}
         </ul>

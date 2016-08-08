@@ -71,10 +71,17 @@ class Metrics(EmbeddedDocument):
 
 # Sensor Description and Status - updated by the remote Controller
 class Sensor(Document):
-    TYPE_SWITCH = 'switchBinary'
-    TYPE_BATTERY = 'battery'
-    TYPE_SENSOR_BINARY = 'sensorBinary'
-    TYPE_SENSOR_MULTILEVEL = 'sensorMultilevel'
+    TYPE_SENSOR_SWITCH = 'switchBinary'                 # on, off, update
+    TYPE_SENSOR_SWITCH_MULTILEVEL = 'switchMultilevel'  # on, off, min, max, update, exact?level=, up, down, upMax, startUp, startDown
+    TYPE_SENSOR_SWITCH_TOGGLE = 'switchToggle'          # on
+    TYPE_SENSOR_BATTERY = 'battery'                     # -
+    TYPE_SENSOR_BINARY = 'sensorBinary'                 # update
+    TYPE_SENSOR_MULTILEVEL = 'sensorMultilevel'         # update
+    TYPE_SENSOR_DOORLOCK = 'doorLock'                   # open, close
+    TYPE_SENSOR_THERMOSTAT = 'thermostat'               # setMode?mode=, setTemp?temp=...
+    TYPE_SENSOR_FAN = 'fan'
+    TYPE_SENSOR_METER = 'meter'
+    TYPE_SENSOR_PROBE = 'probe'
 
     key = StringField(max_length=256)   # Controller Key
     zid = StringField(max_length=16)    # Controller ID (Z-Wave)
@@ -86,6 +93,7 @@ class Sensor(Document):
     tags = ListField(StringField(max_length=64))
     metrics = EmbeddedDocumentField(Metrics)
     last_update = DateTimeField()
+    hidden = BooleanField(default=False)
     #icon
 
     meta = {
@@ -169,6 +177,7 @@ class Rule(Document):
     description = StringField(max_length=256)
     conditions = EmbeddedDocumentListField(RuleCondition, required=False)
     actions = EmbeddedDocumentListField(RuleAction, required=False)
+    is_active = BooleanField(default=True)
 
     meta = {
         'collection': 'rules',

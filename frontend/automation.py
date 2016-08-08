@@ -1,5 +1,6 @@
 import logging
 from django.utils.translation import ugettext as _
+from django.utils.http import unquote
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -144,6 +145,7 @@ def editAction(request, key, rid):
         return redirect('controllers_index')
 
     try:
+        rid = unquote(rid)
         rule = Rule.objects.get(key=key, description=rid)
     except:
         messages.error(request, _('Invalid Parameters'))
@@ -245,6 +247,7 @@ def deleteAction(request, key, rid):
         return redirect('controllers_index')
 
     try:
+        rid = unquote(rid)
         rule = Rule.objects.get(key=key, description=rid)
         zid = rule.zid
         Rule.objects.filter(key=key, description=rid).delete()
@@ -266,6 +269,7 @@ def setDescrAction(request, key, rid):
             return redirect('controllers_index')
 
         try:
+            rid = unquote(rid)
             rule = Rule.objects.get(key=key, description=rid)
         except:
             messages.error(request, _('Invalid Parameters'))
@@ -285,6 +289,50 @@ def setDescrAction(request, key, rid):
             except Exception as e:
                 messages.error(request, _('Sorry, an internal software error occurred'))
                 messages.error(request, e)
+
+    return redirect('automation', key=key)
+
+
+@login_required
+def enableAction(request, key, rid):
+    controller = checkControllerOwner(request.user.username, key)
+    if not controller:
+        messages.error(request, _('Invalid Parameters'))
+        return redirect('controllers_index')
+
+    try:
+        rid = unquote(rid)
+        rule = Rule.objects.get(key=key, description=rid)
+    except:
+        messages.error(request, _('Invalid Parameters'))
+        return redirect('controllers_index')
+
+    rule.is_active = True
+    rule.save()
+    _sendRulesBack(key, rule.zid)
+    messages.info(request, _('The Rule has been modified'))
+
+    return redirect('automation', key=key)
+
+
+@login_required
+def disableAction(request, key, rid):
+    controller = checkControllerOwner(request.user.username, key)
+    if not controller:
+        messages.error(request, _('Invalid Parameters'))
+        return redirect('controllers_index')
+
+    try:
+        rid = unquote(rid)
+        rule = Rule.objects.get(key=key, description=rid)
+    except:
+        messages.error(request, _('Invalid Parameters'))
+        return redirect('controllers_index')
+
+    rule.is_active = False
+    rule.save()
+    _sendRulesBack(key, rule.zid)
+    messages.info(request, _('The Rule has been modified'))
 
     return redirect('automation', key=key)
 

@@ -47,12 +47,12 @@ def create_RuleConditionForm(key):
         csensor_name = forms.ChoiceField(
             (tuple((x.getInternalName(),x.description))
                 for x in sensors
-                if x.devtype == Sensor.TYPE_BATTERY or x.devtype == Sensor.TYPE_SENSOR_MULTILEVEL),
+                if x.devtype == Sensor.TYPE_SENSOR_BATTERY or x.devtype == Sensor.TYPE_SENSOR_MULTILEVEL),
             label=_('Sensor Name'))
         csensor_name2 = forms.ChoiceField(
             (tuple((x.getInternalName(),x.description))
                 for x in sensors
-                if x.devtype == Sensor.TYPE_SWITCH or x.devtype == Sensor.TYPE_SENSOR_BINARY),
+                if x.devtype == Sensor.TYPE_SENSOR_SWITCH or x.devtype == Sensor.TYPE_SENSOR_BINARY),
             label=_('Sensor Name'))
 
         testtype = forms.ChoiceField(choices=TESTOP, label=_('Value Comparison'), required=False)
@@ -106,7 +106,7 @@ def create_RuleActionForm(key):
 
         actiontype = forms.ChoiceField(choices=TYPE, label=_('Action Type'))
 
-        sensors = Sensor.objects.filter(key=key, devtype=Sensor.TYPE_SWITCH)
+        sensors = Sensor.objects.filter(key=key, devtype=Sensor.TYPE_SENSOR_SWITCH)
         asensor_name = forms.ChoiceField((tuple((x.getInternalName(),x.description)) for x in sensors), label=_('Sensor Name'), required=False)
         avalue = forms.ChoiceField(label=_('Command Value'), choices=COMMANDS, required=False)
 
