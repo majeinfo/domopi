@@ -71,17 +71,17 @@ class Metrics(EmbeddedDocument):
 
 # Sensor Description and Status - updated by the remote Controller
 class Sensor(Document):
-    TYPE_SENSOR_SWITCH = 'switchBinary'                 # on, off, update
-    TYPE_SENSOR_SWITCH_MULTILEVEL = 'switchMultilevel'  # on, off, min, max, update, exact?level=, up, down, upMax, startUp, startDown
-    TYPE_SENSOR_SWITCH_TOGGLE = 'switchToggle'          # on
-    TYPE_SENSOR_BATTERY = 'battery'                     # -
-    TYPE_SENSOR_BINARY = 'sensorBinary'                 # update
-    TYPE_SENSOR_MULTILEVEL = 'sensorMultilevel'         # update
-    TYPE_SENSOR_DOORLOCK = 'doorLock'                   # open, close
-    TYPE_SENSOR_THERMOSTAT = 'thermostat'               # setMode?mode=, setTemp?temp=...
-    TYPE_SENSOR_FAN = 'fan'
-    TYPE_SENSOR_METER = 'meter'
-    TYPE_SENSOR_PROBE = 'probe'
+    TYPE_SWITCH = 'switchBinary'                 # on, off, update
+    TYPE_SWITCH_MULTILEVEL = 'switchMultilevel'  # on, off, min, max, update, exact?level=, up, down, upMax, startUp, startDown
+    TYPE_SWITCH_TOGGLE = 'switchToggle'          # on
+    TYPE_BATTERY = 'battery'                     # -
+    TYPE_SENSOR_BINARY = 'sensorBinary'          # update
+    TYPE_SENSOR_MULTILEVEL = 'sensorMultilevel'  # update
+    TYPE_DOORLOCK = 'doorLock'                   # open, close
+    TYPE_THERMOSTAT = 'thermostat'               # setMode?mode=, setTemp?temp=...
+    TYPE_FAN = 'fan'
+    TYPE_METER = 'meter'
+    TYPE_PROBE = 'probe'
 
     key = StringField(max_length=256)   # Controller Key
     zid = StringField(max_length=16)    # Controller ID (Z-Wave)
@@ -152,6 +152,7 @@ class RuleCondition(EmbeddedDocument):
     testtype = StringField(max_length=4, required=False)
     starttime = StringField(max_length=16, required=False)  # in localtime because of daylight
     endtime = StringField(max_length=16, required=False)    # idem
+    duration = IntField(required=False)   # in "minutes"
     days = StringField(max_length=8, required=False)
     sunevt = StringField(max_length=8, required=False)     # sunrise or sunset
     sunoffset = StringField(max_length=8, required=False)      # after or before

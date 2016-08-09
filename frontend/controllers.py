@@ -101,6 +101,19 @@ def viewLogs(request, key):
         )
         cmd.save()
         messages.info(request, _('The Controller will send the Logs...'))
-        return render(request, 'controllers/viewlogs.html', { 'logs': logs, 'tzinfo': request.session.get('django_timezone') })
+        return render(request, 'controllers/viewlogs.html', { 'contr': controller, 'logs': logs, 'tzinfo': request.session.get('django_timezone') })
+
+    return redirect('controllers_index')
+
+
+# Delete all the logs of remote Controller
+@login_required
+def clearLogs(request, key):
+    controller = checkControllerOwner(request.user.username, key)
+    if not controller:
+        messages.error(request, _('Invalid Parameters'))
+    else:
+        logs = Log.objects.filter(key=key).delete()
+        messages.info(request, _('Logs have been cleared'))
 
     return redirect('controllers_index')

@@ -47,6 +47,7 @@ def _updateRuleFromForm(rule, controller, key, form, cformset, aformset):
             condrule.devid, condrule.instid, condrule.sid = Sensor.splitInternalName(f.cleaned_data['csensor_name'])
             condrule.value = f.cleaned_data['cvalue']
             condrule.testtype = f.cleaned_data['testtype']
+            condrule.duration = f.cleaned_data['duration']
         elif condrule.condtype == RuleCondition.STATUS:
             condrule.devid, condrule.instid, condrule.sid = Sensor.splitInternalName(f.cleaned_data['csensor_name2'])
             condrule.value = f.cleaned_data['cvalue2']
@@ -183,6 +184,7 @@ def editAction(request, key, rid):
                 d['csensor_name'] = Sensor.buildInternalName(cond.devid, cond.instid, cond.sid)
                 d['cvalue'] = cond.value
                 d['testtype'] = cond.testtype
+                d['duration'] = cond.duration
             elif cond.condtype == RuleCondition.STATUS:
                 d['csensor_name2'] = Sensor.buildInternalName(cond.devid, cond.instid, cond.sid)
                 d['cvalue2'] = cond.value

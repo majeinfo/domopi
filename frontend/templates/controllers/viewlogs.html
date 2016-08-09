@@ -6,13 +6,27 @@
 {% block content %}
 
 <!-- {{ tzinfo }} -->
+<a class="btn btn-primary" href="{% url 'view_logs' key=contr.key %}">{% trans "Refresh" %}</a>
+<a class="btn btn-danger" href="{% url 'clear_logs' key=contr.key %}">{% trans "Clear Logs" %}</a>
+<br><br>
 <table class="table">
     <tbody class="table-striped">
         <tr><th>{% trans "Date" %}</th><th>{% trans "Severity" %}</th><th>{% trans "Message" %}</th></tr>
         {% for log in logs %}
         <tr>
             <td>{{ log.date|localtime }}</td>
-            <td>{{ log.level }}</td>
+            <td>
+                {% if log.level == 'error' %}
+                    <span class="label label-danger">
+                {% elif log.level == 'warning' %}
+                    <span class="label label-warning">
+                {% elif log.level == 'info' %}
+                    <span class="label label-info">
+                {% else %}
+                {% endif %}
+                    {{ log.level }}
+                    </span>
+            </td>
             <td>{{ log.msg }}</td>
         </tr>
         {% endfor %}

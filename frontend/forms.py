@@ -47,12 +47,12 @@ def create_RuleConditionForm(key):
         csensor_name = forms.ChoiceField(
             (tuple((x.getInternalName(),x.description))
                 for x in sensors
-                if x.devtype == Sensor.TYPE_SENSOR_BATTERY or x.devtype == Sensor.TYPE_SENSOR_MULTILEVEL),
+                if x.devtype == Sensor.TYPE_BATTERY or x.devtype == Sensor.TYPE_SENSOR_MULTILEVEL),
             label=_('Sensor Name'))
         csensor_name2 = forms.ChoiceField(
             (tuple((x.getInternalName(),x.description))
                 for x in sensors
-                if x.devtype == Sensor.TYPE_SENSOR_SWITCH or x.devtype == Sensor.TYPE_SENSOR_BINARY),
+                if x.devtype == Sensor.TYPE_SWITCH or x.devtype == Sensor.TYPE_SENSOR_BINARY),
             label=_('Sensor Name'))
 
         testtype = forms.ChoiceField(choices=TESTOP, label=_('Value Comparison'), required=False)
@@ -67,6 +67,7 @@ def create_RuleConditionForm(key):
 
         starttime = forms.CharField(label=_('Start Time'), help_text=_('This a time given with the format HH:MM'), required=False)
         endtime = forms.CharField(label=_('End Time'), help_text=_('This a time given with the format HH:MM'), required=False)
+        duration = forms.IntegerField(label=_('Duration'), help_text=_('This the duration (in minutes) for the condition to be satisfied'), required=False)
         alldays = forms.BooleanField(label=_('Everyday'), required=False)
         monday = forms.BooleanField(label=_('Monday'), required=False)
         tuesday = forms.BooleanField(label=_('Tuesday'), required=False)
@@ -106,7 +107,7 @@ def create_RuleActionForm(key):
 
         actiontype = forms.ChoiceField(choices=TYPE, label=_('Action Type'))
 
-        sensors = Sensor.objects.filter(key=key, devtype=Sensor.TYPE_SENSOR_SWITCH)
+        sensors = Sensor.objects.filter(key=key, devtype=Sensor.TYPE_SWITCH)
         asensor_name = forms.ChoiceField((tuple((x.getInternalName(),x.description)) for x in sensors), label=_('Sensor Name'), required=False)
         avalue = forms.ChoiceField(label=_('Command Value'), choices=COMMANDS, required=False)
 

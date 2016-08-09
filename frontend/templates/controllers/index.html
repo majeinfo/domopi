@@ -28,7 +28,7 @@
             <td>
                 <a class="btn btn-primary" href="{% url 'sensors_list' key=contr.key %}">{% trans "Manage Sensors" %}</a>
                 <a class="btn btn-info" href="{% url 'automation' key=contr.key %}">{% trans "Manage Automation Rules" %}</a>
-                <a class="btn btn-success" href="{% url 'controller_viewlogs' key=contr.key %}">{% trans "View Logs" %}</a>
+                <a class="btn btn-success" href="{% url 'view_logs' key=contr.key %}">{% trans "View Logs" %}</a>
                 <a class="btn btn-danger" href="{% url 'controller_delete' key=contr.key %}" onclick="return confirmBox();">{% trans "Delete from Account" %}</a>
             </td>
         </tr>
