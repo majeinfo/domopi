@@ -73,7 +73,7 @@
                {{ sensor.metrics.probeTitle }}
             {% endif %}
             {% if sensor.metrics.is_level_number %}
-                {{ sensor.metrics.level }} {{ sensor.metrics.scaleTitle }}
+                {{ sensor.metrics.level }} {{ sensor.metrics.scaleTitle }}  <a class="btn btn-success btn-xs" href="{% url 'sensor_graph' key=device.key zid=sensor.zid devid=sensor.devid instid=sensor.instid sid=sensor.sid %}">{% trans "Graph" %}</a>
             {% else %}
                 {% if sensor.metrics.on_off %} {% trans "ON" %} {% else %} {% trans "OFF" %} {% endif %}
             {% endif %}

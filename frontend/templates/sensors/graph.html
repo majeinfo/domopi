@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Sensor Graph" %}{% endblock %}
+{% block content %}
+
+<script src="https://code.highcharts.com/4.2.6/highcharts.js"></script>
+<h1>{{ title }}</h1>
+<div id="container_last24h" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="container_last7d" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+$(function () {
+    $('#container_last24h').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: '{% trans 'Last 24 Hours' %}'
+        },
+        //subtitle: {
+        //    text: 'Irregular time data in Highcharts JS'
+        //},
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            }
+        },
+        yAxis: {
+            title: {
+                text: '{{ metrics }} ({{ scale }})'
+            },
+            min: 0
+        },
+        tooltip: {
+            headerFormat: '<b>{{ metrics }}</b><br>',
+            pointFormat: '{point.x:%e. %b}: {point.y:.2f} °C'
+        },
+
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            }
+        },
+
+        series: [{
+            name: '{{ metrics }}',
+            data: [
+                {% for val in values_last24h %}
+                    [ {{ val.0 }}, {{ val.1 }} ],
+                {% endfor %}
+            ]
+        }]
+    });
+    $('#container_last7d').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: '{% trans 'Last Week' %}'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+                text: 'Date'
+            }
+        },
+        yAxis: {
+            title: {
+                text: '{{ metrics }} ({{ scale }})'
+            },
+            min: 0
+        },
+        tooltip: {
+            headerFormat: '<b>{{ metrics }}</b><br>',
+            pointFormat: '{point.x:%e. %b}: {point.y:.2f} °C'
+        },
+
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            }
+        },
+
+        series: [{
+            name: '{{ metrics }}',
+            data: [
+                {% for val in values_last7d %}
+                    [ {{ val.0 }}, {{ val.1 }} ],
+                {% endfor %}
+            ]
+        }]
+    });
+});
+</script>
+
+{% endblock %}

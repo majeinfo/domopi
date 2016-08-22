@@ -4,9 +4,13 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from . models import Command, Sensor, checkSensorOwner
 import json
 import collections
+import requests
+import urllib
+import time
 
 logger = logging.getLogger('domopi')
 
@@ -56,13 +60,13 @@ def commandAction(request, key, zid, devid, instid, sid, cmd):
         return redirect('controllers_index')
 
     cmd = Command.objects.create(
-        key = key,
-        zid = zid,
-        cmd = cmd,
-        parms = json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid })
+        key=key,
+        zid=zid,
+        cmd=cmd,
+        parms=json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid })
     )
     cmd.save()
-    messages.info(request, 'Command Sent - please wait 10 seconds before changes apply')
+    messages.info(request, _('Command Sent - please wait 10 seconds before changes apply'))
     return HttpResponseRedirect('/frontend/sensors/' + key)
 
 
@@ -79,15 +83,15 @@ def setdescrAction(request, key, zid, devid, instid, sid):
         newdescr = request.POST['newname']    # TODO: check injection
         if newdescr:
             cmd = Command.objects.create(
-                key = key,
-                zid = zid,
-                cmd = 'sensor_setdescr',
-                parms = json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid, 'value': newdescr })
+                key=key,
+                zid=zid,
+                cmd='sensor_setdescr',
+                parms=json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid, 'value': newdescr })
             )
             cmd.save()
             sensor.description = newdescr
             sensor.save()
-            messages.info(request, 'Command Sent - please wait 10 seconds before changes apply')
+            messages.info(request, _('Command Sent - please wait 10 seconds before changes apply'))
 
     return HttpResponseRedirect('/frontend/sensors/' + key)
 
@@ -102,13 +106,13 @@ def hideDeviceAction(request, key, zid, devid):
         return redirect('controllers_index')
 
     cmd = Command.objects.create(
-        key = key,
-        zid = zid,
-        cmd = 'device_hide',
-        parms = json.dumps({ 'devid': devid })
+        key=key,
+        zid=zid,
+        cmd='device_hide',
+        parms=json.dumps({ 'devid': devid })
     )
     cmd.save()
-    messages.info(request, 'Device is now hidden in this Interface')
+    messages.info(request, _('Device is now hidden in this Interface'))
     return HttpResponseRedirect('/frontend/sensors/' + key)
 
 
@@ -122,13 +126,13 @@ def unhideDeviceAction(request, key, zid, devid):
         return redirect('controllers_index')
 
     cmd = Command.objects.create(
-        key = key,
-        zid = zid,
-        cmd = 'device_unhide',
-        parms = json.dumps({ 'devid': devid })
+        key=key,
+        zid=zid,
+        cmd='device_unhide',
+        parms=json.dumps({ 'devid': devid })
     )
     cmd.save()
-    messages.info(request, 'Device is now visible in this Interface')
+    messages.info(request, _('Device is now visible in this Interface'))
     return HttpResponseRedirect('/frontend/sensors/' + key)
 
 
@@ -142,10 +146,10 @@ def hideSensorAction(request, key, zid, devid, instid, sid):
         return redirect('controllers_index')
 
     cmd = Command.objects.create(
-        key = key,
-        zid = zid,
-        cmd = 'sensor_hide',
-        parms = json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid })
+        key=key,
+        zid=zid,
+        cmd='sensor_hide',
+        parms=json.dumps({'devid': devid, 'instid': instid, 'sid': sid})
     )
     cmd.save()
 
@@ -154,7 +158,7 @@ def hideSensorAction(request, key, zid, devid, instid, sid):
     sensor.save()
     logger.debug(sensor)
 
-    messages.info(request, 'Sensor is now hidden in this Interface')
+    messages.info(request, _('Sensor is now hidden in this Interface'))
     return HttpResponseRedirect('/frontend/sensors/' + key)
 
 
@@ -168,17 +172,17 @@ def unhideSensorAction(request, key, zid, devid, instid, sid):
         return redirect('controllers_index')
 
     cmd = Command.objects.create(
-        key = key,
-        zid = zid,
-        cmd = 'sensor_unhide',
-        parms = json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid })
+        key=key,
+        zid=zid,
+        cmd='sensor_unhide',
+        parms=json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid })
     )
     cmd.save()
 
     sensor.hidden = False
     sensor.save()
 
-    messages.info(request, 'Sensor is now visible in this Interface')
+    messages.info(request, _('Sensor is now visible in this Interface'))
     return HttpResponseRedirect('/frontend/sensors/' + key)
 
 
@@ -191,14 +195,58 @@ def unhideAllSensorAction(request, key, zid, devid):
         return redirect('controllers_index')
 
     cmd = Command.objects.create(
-        key = key,
-        zid = zid,
-        cmd = 'sensor_all_unhide',
-        parms = json.dumps({ 'devid': devid })
+        key=key,
+        zid=zid,
+        cmd='sensor_all_unhide',
+        parms=json.dumps({ 'devid': devid })
     )
     cmd.save()
 
     Sensor.objects.filter(key=key, zid=zid, devid=devid).update(hidden=False)
 
-    messages.info(request, 'All hidden Sensors are now visible in this Interface')
+    messages.info(request, _('All hidden Sensors are now visible in this Interface'))
     return HttpResponseRedirect('/frontend/sensors/' + key)
+
+
+# Show a graph for a Sensor
+@login_required
+def showGraphAction(request, key, zid, devid, instid, sid):
+
+    sensor = checkSensorOwner(request.user.username, key, zid, devid, instid, sid)
+    if not sensor:
+        messages.error(request, _('Invalid Parameters'))
+        return redirect('controllers_index')
+
+    cur_time = time.gmtime(int(time.time()) - 60*60*24)
+    start_time = '%d-%02d-%02dT00:00:00.000Z' % (cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday)
+    query = "SELECT level FROM controller%s WHERE devid = '%s' AND instid = '%s' AND sid = '%s' AND time > '%s'" % (key, devid, instid, sid, start_time)
+    logger.debug(query)
+    params = urllib.parse.urlencode({'q': query, 'epoch': 'ms' })
+    req = requests.get('http://%s:%d/query?db=%s' % (settings.INFLUXDBSERVER, settings.INFLUXDBPORT, settings.INFLUXDBNAME), params=params)
+    logger.debug(req)
+    if req.status_code != 200:
+        messages.error(request, _('Could not get values from Database'))
+        return HttpResponseRedirect('/frontend/sensors/' + key)
+    values_last24h = req.json()['results'][0]['series'][0]['values']
+
+    cur_time = time.gmtime(int(time.time()) - 60*60*24*7)
+    start_time = '%d-%02d-%02dT00:00:00.000Z' % (cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday)
+    query = "SELECT level FROM controller%s WHERE devid = '%s' AND instid = '%s' AND sid = '%s' AND time > '%s'" % (key, devid, instid, sid, start_time)
+    logger.debug(query)
+    params = urllib.parse.urlencode({'q': query, 'epoch': 'ms' })
+    req = requests.get('http://%s:%d/query?db=%s' % (settings.INFLUXDBSERVER, settings.INFLUXDBPORT, settings.INFLUXDBNAME), params=params)
+    logger.debug(req)
+    if req.status_code != 200:
+        messages.error(request, _('Could not get values from Database'))
+        return HttpResponseRedirect('/frontend/sensors/' + key)
+    values_last7d = req.json()['results'][0]['series'][0]['values']
+
+    context = {
+        'key': key,
+        'title': _('Graph for Sensor: ') + sensor.getInternalName(),    # TODO: strip quote for JavaScript !
+        'metrics': sensor.metrics.probeTitle,
+        'scale': sensor.metrics.scaleTitle,
+        'values_last24h': values_last24h,
+        'values_last7d': values_last7d,
+    }
+    return render(request, 'sensors/graph.html', context)

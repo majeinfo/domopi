@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^sensors/hideSensor/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<devid>[^/]+)/(?P<instid>[^/]+)/(?P<sid>[^/]+)', sensors.hideSensorAction, name='sensor_hide'),
     url(r'^sensors/unhideSensor/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<devid>[^/]+)/(?P<instid>[^/]+)/(?P<sid>[^/]+)', sensors.unhideSensorAction, name='sensor_unhide'),
     url(r'^sensors/unhideSensor/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<devid>[^/]+)', sensors.unhideAllSensorAction, name='sensor_all_unhide'),
+    url(r'^sensors/graph/(?P<key>[^/]+)/(?P<zid>[^/]+)/(?P<devid>[^/]+)/(?P<instid>[^/]+)/(?P<sid>[^/]+)', sensors.showGraphAction, name='sensor_graph'),
     url(r'^sensors/(?P<key>[^/]+)', sensors.indexAction, name='sensors_list'),
     url(r'^automation/add/(?P<key>[^/]+)', automation.addAction, name='rule_add'),
     url(r'^automation/delete/(?P<key>[^/]+)/(?P<rid>.+)', automation.deleteAction, name='rule_delete'),

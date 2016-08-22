@@ -122,6 +122,10 @@ _MONGODB_DATABASE_HOST = 'mongodb://%s:%s@%s/%s' % (_MONGODB_USER, _MONGODB_PASS
 
 mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
+INFLUXDBSERVER = 'influxdbserver'
+INFLUXDBPORT = 8086
+INFLUXDBNAME = 'domopi'
+
 #SESSION_ENGINE = 'mongo_sessions.session'
 
 #MONGO_PORT = 27017
