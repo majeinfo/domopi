@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext as _
 from django import forms
 from captcha.fields import CaptchaField
+from mongoengine.queryset.visitor import Q
 import pytz
 from . models import Sensor, RuleCondition, RuleAction
 
@@ -107,7 +108,7 @@ def create_RuleActionForm(key):
 
         actiontype = forms.ChoiceField(choices=TYPE, label=_('Action Type'))
 
-        sensors = Sensor.objects.filter(key=key, devtype=Sensor.TYPE_SWITCH)
+        sensors = Sensor.objects.filter(Q(devtype=Sensor.TYPE_SWITCH) | Q(devtype=Sensor.TYPE_SWITCH_MULTILEVEL), Q(key=key))
         asensor_name = forms.ChoiceField((tuple((x.getInternalName(),x.description)) for x in sensors), label=_('Sensor Name'), required=False)
         avalue = forms.ChoiceField(label=_('Command Value'), choices=COMMANDS, required=False)
 

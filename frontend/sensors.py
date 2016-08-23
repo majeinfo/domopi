@@ -63,11 +63,16 @@ def commandAction(request, key, zid, devid, instid, sid, cmd):
         messages.error(request, _('Invalid Parameters'))
         return redirect('controllers_index')
 
+    d = { 'devid': devid, 'instid': instid, 'sid': sid }
+    d.update(request.GET.dict())
+    if 'csrfmiddlewaretoken' in d:
+        del d['csrfmiddlewaretoken']
+
     cmd = Command.objects.create(
         key=key,
         zid=zid,
         cmd=cmd,
-        parms=json.dumps({ 'devid': devid, 'instid': instid, 'sid': sid })
+        parms=json.dumps(d)
     )
     cmd.save()
     messages.info(request, _('Command Sent - please wait 10 seconds before changes apply'))
