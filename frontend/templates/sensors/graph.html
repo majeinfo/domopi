@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load tz %}
 {% block title %}{% trans "Sensor Graph" %}{% endblock %}
 {% block content %}
 
@@ -35,7 +36,8 @@ $(function () {
             title: {
                 text: '{{ metrics }} ({{ scale }})'
             },
-            min: 0
+            min: null
+            //tickInterval: 5
         },
         tooltip: {
             headerFormat: '<b>{{ metrics }}</b><br>',
@@ -80,7 +82,7 @@ $(function () {
             title: {
                 text: '{{ metrics }} ({{ scale }})'
             },
-            min: 0
+            min: null
         },
         tooltip: {
             headerFormat: '<b>{{ metrics }}</b><br>',
