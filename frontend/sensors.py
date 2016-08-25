@@ -238,16 +238,20 @@ def showGraphAction(request, key, zid, devid, instid, sid):
         messages.error(request, _('Could not get values from Database'))
         return HttpResponseRedirect('/frontend/sensors/' + key)
 
-    values_last24h = req.json()['results'][0]['series'][0]['values']
-    for idx, val in enumerate(values_last24h):
-    #     logger.debug(timezone.get_current_timezone())
-    #     logger.debug(int(val[0] / 1000))
-    #     logger.debug(datetime.utcfromtimestamp(int(val[0] / 1000)))
-    #     logger.debug(timezone.make_aware(datetime.utcfromtimestamp(int(val[0]/1000))))
-    #     values_last24h[idx][0] = timezone.make_aware(datetime.utcfromtimestamp(int(val[0]/1000))).timestamp() * 1000
-    #     values_last24h[idx][0] = str(timezone.make_aware(datetime.utcfromtimestamp(int(val[0]/1000))))
-    #     logger.debug(values_last24h[idx][0])
-        values_last24h[idx][0] = int(timezone.get_current_timezone().localize(datetime.utcfromtimestamp(int(val[0] / 1000))).strftime("%s")) * 1000
+    try:
+        values_last24h = req.json()['results'][0]['series'][0]['values']
+        for idx, val in enumerate(values_last24h):
+            #logger.debug(timezone.get_current_timezone().localize(datetime.utcfromtimestamp(int(val[0] / 1000))))
+            d = timezone.get_current_timezone().localize(datetime.utcfromtimestamp(int(val[0] / 1000)))
+            # logger.debug(type(d))
+            # logger.debug(d.tzinfo)
+            # logger.debug(d.tzinfo.utcoffset(d))
+            # logger.debug(timezone.get_current_timezone().localize(datetime.utcfromtimestamp(int(val[0] / 1000))).strftime("%s"))
+            tzoff = d.tzinfo.utcoffset(d).total_seconds() * 1000
+            values_last24h[idx][0] = int(d.strftime("%s")) * 1000 + tzoff
+    except Exception as e:
+        logger.error(e)
+        values_last24h = None
 
     cur_time = time.gmtime(int(time.time()) - 60*60*24*7)
     start_time = '%d-%02d-%02dT00:00:00.000Z' % (cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday)
@@ -260,10 +264,15 @@ def showGraphAction(request, key, zid, devid, instid, sid):
         messages.error(request, _('Could not get values from Database'))
         return HttpResponseRedirect('/frontend/sensors/' + key)
 
-    values_last7d = req.json()['results'][0]['series'][0]['values']
-    for idx, val in enumerate(values_last7d):
-        values_last7d[idx][0] = int(timezone.get_current_timezone().localize(datetime.utcfromtimestamp(int(val[0]/1000))).strftime("%s"))* 1000
-
+    try:
+        values_last7d = req.json()['results'][0]['series'][0]['values']
+        for idx, val in enumerate(values_last7d):
+            d = timezone.get_current_timezone().localize(datetime.utcfromtimestamp(int(val[0] / 1000)))
+            tzoff = d.tzinfo.utcoffset(d).total_seconds() * 1000
+            values_last7d[idx][0] = int(d.strftime("%s"))* 1000 + tzoff
+    except Exception as e:
+        logger.error(e)
+        values_last7d = None
 
     context = {
         'key': key,

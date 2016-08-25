@@ -7,7 +7,15 @@
 
 <script src="https://code.highcharts.com/4.2.6/highcharts.js"></script>
 <h1>{{ title }}</h1>
+
+{% if not values_last24h %}
+    {% trans "No Data available" %}
+{% endif %}
 <div id="container_last24h" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+{% if not values_last7d %}
+    {% trans "No Data available" %}
+{% endif %}
 <div id="container_last7d" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 <script type="text/javascript">
