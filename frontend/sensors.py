@@ -228,7 +228,7 @@ def showGraphAction(request, key, zid, devid, instid, sid):
         return redirect('controllers_index')
 
     cur_time = time.gmtime(int(time.time()) - 60*60*24)
-    start_time = '%d-%02d-%02dT00:00:00.000Z' % (cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday)
+    start_time = '%d-%02d-%02dT%02d:00:00.000Z' % (cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday, cur_time.tm_hour)
     query = "SELECT level FROM controller%s WHERE devid = '%s' AND instid = '%s' AND sid = '%s' AND time > '%s'" % (key, devid, instid, sid, start_time)
     logger.debug(query)
     params = urllib.parse.urlencode({'q': query, 'epoch': 'ms' })
@@ -254,7 +254,7 @@ def showGraphAction(request, key, zid, devid, instid, sid):
         values_last24h = None
 
     cur_time = time.gmtime(int(time.time()) - 60*60*24*7)
-    start_time = '%d-%02d-%02dT00:00:00.000Z' % (cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday)
+    start_time = '%d-%02d-%02dT%02d:00:00.000Z' % (cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday, cur_time.tm_hour)
     query = "SELECT level FROM controller%s WHERE devid = '%s' AND instid = '%s' AND sid = '%s' AND time > '%s'" % (key, devid, instid, sid, start_time)
     logger.debug(query)
     params = urllib.parse.urlencode({'q': query, 'epoch': 'ms' })
