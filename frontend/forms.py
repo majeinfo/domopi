@@ -67,7 +67,7 @@ def create_RuleConditionForm(key):
         sunevt = forms.ChoiceField(choices=SUNEVTS, label=_('Sun Event'), required=False)
 
         starttime = forms.CharField(label=_('Start Time'), help_text=_('This a time given with the format HH:MM'), required=False)
-        endtime = forms.CharField(label=_('End Time'), help_text=_('This a time given with the format HH:MM'), required=False)
+        #endtime = forms.CharField(label=_('End Time'), help_text=_('This a time given with the format HH:MM'), required=False)
         duration = forms.IntegerField(label=_('Duration'), help_text=_('This the duration (in minutes) for the condition to be satisfied'), required=False)
         alldays = forms.BooleanField(label=_('Everyday'), required=False)
         monday = forms.BooleanField(label=_('Monday'), required=False)

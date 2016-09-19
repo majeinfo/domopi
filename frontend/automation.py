@@ -54,7 +54,7 @@ def _updateRuleFromForm(rule, controller, key, form, cformset, aformset):
             condrule.testtype = f.cleaned_data['testtype2']
         elif condrule.condtype == RuleCondition.TIME:
             condrule.starttime = f.cleaned_data['starttime']
-            condrule.endtime = f.cleaned_data['endtime']
+            #condrule.endtime = f.cleaned_data['endtime']
             condrule.days = ''
             if not f.cleaned_data['alldays']:
                 if f.cleaned_data['sunday']: condrule.days += '0'
@@ -191,7 +191,7 @@ def editAction(request, key, rid):
                 d['testtype2'] = cond.testtype
             elif cond.condtype == RuleCondition.TIME:
                 d['starttime'] = cond.starttime
-                d['endtime'] = cond.endtime
+                #d['endtime'] = cond.endtime
                 d['alldays'] = True if not cond.days else False
                 d['sunday'] = True if '0' in cond.days else False
                 d['monday'] = True if '1' in cond.days else False
